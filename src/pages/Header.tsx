@@ -15,15 +15,15 @@ const buttonStyle = {
 };
 
 const Header = () => {
-  const navItems = ['Home', 'Employee Survey', 'Contact'];
-  const linkItems = ['Home', '/employee_survey', 'Contact'];
+  const navItems = ['Home', 'Employee Survey', 'Dashboard'];
+  const linkItems = ['/', '/employee_survey', 'https://nautical-analytics.streamlit.app/'];
   const handleDrawerToggle = () => {
 
   }
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', color:'#161616' }}>
     <CssBaseline />
-    <AppBar component="nav" position="static">
+    <AppBar sx={{  background:'#161616' }} component="nav" position="static">
       <Toolbar>
           <IconButton
             color="inherit"

@@ -57,6 +57,21 @@ const writeSkillsData = (
     });
 };
 
+const readSkillMeanData = async (
+  ): Promise<any> => {
+    const dataLocation = "skill_means";
+    const reference = ref(db, `${dataLocation}/`);
+    const data = await get(reference)
+        .then((snapshot) => {
+            if (snapshot.exists()) {
+                return snapshot.val();
+            }
+        }).catch((error) => {
+            console.log('Failed to fetch data:', error.message);
+        });
+    return data;
+};
+
 const writeSatisfactionData = (
     id: number,
     workplaceSatisfaction_score: number,
@@ -103,5 +118,6 @@ export {
     writeEmployeeData,
     writeSkillsData,
     writeSatisfactionData,
-    writeFeedbackData
+    writeFeedbackData,
+    readSkillMeanData
 };

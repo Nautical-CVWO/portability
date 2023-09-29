@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import EmployeeSurvey from './pages/EmployeeSurvey';
@@ -11,15 +10,13 @@ function App() {
   return (
     <>
     <ThemeProvider theme={theme}>
-      <div className="App">
+    <div style={{ width: '100%', minHeight: 'min-content', height:'100vh', backgroundColor: '#000' }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/employee_survey" element={<EmployeeSurvey />} />
           </Routes>
         </BrowserRouter>
-      
-        
       </div>
     </ThemeProvider>
     </>
