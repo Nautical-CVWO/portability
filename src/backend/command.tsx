@@ -85,6 +85,8 @@ const writeFeedbackData = (
   ): void => {
     const dataLocation = "feedback";
     const reference = ref(db, `${dataLocation}/${id}/`);
+    const feedbackData: { [key: number]: string } = {};
+    feedbackData[id] = feedback;
     get(reference)
         .then((snapshot) => {
             if (snapshot.exists()) {
@@ -94,9 +96,7 @@ const writeFeedbackData = (
         }).catch((error) => {
             console.log('Failed to fetch data:', error.message);
         });
-    update(ref(db, `${dataLocation}/`), {
-        id: feedback
-    });
+    update(ref(db, `${dataLocation}/`), feedbackData);
 };
 
 export {

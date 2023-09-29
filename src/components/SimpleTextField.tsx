@@ -1,22 +1,37 @@
-import React, { MouseEvent } from 'react'
+import React from 'react'
 
-import { Button, ButtonProps } from '@mui/material';
+import { TextField } from '@mui/material';
+import { useFormikContext } from 'formik';
 
-interface CustomButtonProps extends ButtonProps {
-    label: string;
-    onClick: (event: MouseEvent<HTMLButtonElement, globalThis.MouseEvent>) => void;
+interface SimpleTextFieldProps {
+    name: string;
+    label: any;
+    type?: string;
+    rows?: number;
+    multiline?: boolean;
+    disabled?: boolean;
+    // placeholder: any;
 }
 
-const SimpleTextField = ({label, color, onClick}: CustomButtonProps) => {
-  return (<>
-    
-      <Button color={color} onClick={onClick}>
-        {label}
-      </Button>
-    
-    </>
-   
-  )
+const SimpleTextField = ({name, label, type="text", rows=1, multiline = true, disabled = false, ...props}: SimpleTextFieldProps) => {
+
+    const formik = useFormikContext();
+
+    return (
+        <TextField 
+            name={name}
+            label={label}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}  
+            fullWidth
+            multiline
+            type={type}
+            rows={rows}
+            disabled={disabled}
+            // placeholder={placeholder}
+            {...props}       
+        />
+    );
 }
 
 export default SimpleTextField;

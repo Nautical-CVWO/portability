@@ -1,9 +1,22 @@
 import { AppBar, Box, Button, CssBaseline, IconButton, Toolbar, Typography } from '@mui/material'
 import React from 'react'
+import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 
+const linkStyle = {
+  textDecoration: 'none', // Remove underline
+  color: 'white'
+};
+
+const buttonStyle = {
+  '&:hover': {
+    color: 'blue', // Change the color to your desired hover color
+  },
+};
+
 const Header = () => {
-  const navItems = ['Home', 'About', 'Contact'];
+  const navItems = ['Home', 'Employee Survey', 'Contact'];
+  const linkItems = ['Home', '/employee_survey', 'Contact'];
   const handleDrawerToggle = () => {
 
   }
@@ -26,13 +39,18 @@ const Header = () => {
             component="div"
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
-            PORTABILITY
+            NAUTICAL
           </Typography>
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map((item) => (
-              <Button key={item} sx={{ color: '#fff' }}>
-                {item}
-              </Button>
+            {navItems.map((index, item) => (
+                <Button sx={{
+                  '&:hover': {
+                    color: 'black', // Change the color to your desired hover color
+                  },
+                }}>
+                  <Link style={linkStyle} to={linkItems[Number(item)]}>{navItems[Number(item)]}</Link>
+                </Button>
+                
             ))}
           </Box>
         </Toolbar>

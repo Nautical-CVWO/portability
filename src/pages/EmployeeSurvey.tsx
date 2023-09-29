@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Field, Form, Formik, FormikProps } from 'formik';
 import { EmployeeSurveyFormInitialValues } from '../types/EmployeeSurveyFormData';
 import {
@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Slider,
 } from '@mui/material';
 import {
   AccountCircle,
@@ -27,19 +28,33 @@ import {
 import {
   writeEmployeeData,
   writeSkillsData,
-  writeSatisfactionData,
   writeFeedbackData
 } from '../backend/command';
+import SimpleTextField from '../components/SimpleTextField';
+import ProgressSlider from '../components/ProgressSlider';
+import { useNavigate } from 'react-router-dom';
+
 
 const EmployeeSurvey: React.FC = () => {
 
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const navigate = useNavigate();
   return (
     <Formik
       initialValues={EmployeeSurveyFormInitialValues}
       onSubmit={(values) => {
         // Handle form submission here
         console.log(values);
-        writeEmployeeData(values.id, values.name, values.gender, values.education, values.position, values.performance)
+        setIsSubmitting(true);
+        writeEmployeeData(values.id, values.name, values.gender, values.education, values.position, values.performance);
+        writeSkillsData(values.id, values.communication, values.creativity, values.problem_solving, values.teamwork, values.time_management);
+        writeFeedbackData(values.id, values.feedback);
+        setTimeout(() => {
+            setIsSubmitting(false); 
+        }, 2000);
+        navigate('/');
+        
+        
       }}
     >
       {(formikProps: FormikProps<any>) => (
@@ -59,243 +74,214 @@ const EmployeeSurvey: React.FC = () => {
                 fontFamily: 'Montserrat',
               }}
             >
-            Employee Survey
+                Employee Survey
             </Typography>
 
             {/* Employee Information Section */}
-            <Typography variant="h6" sx={{ marginBottom: '15px', fontFamily: 'Montserrat' }}>
+            <Typography variant="h6" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <AccountCircle fontSize="large" sx={{ marginRight: '10px' }} />
               <span>Employee Information</span>
             </Typography>
+
             <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6} md={6}>
                 <Field
-                  name="name"
-                  label="Employee Name"
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                />
+                  render={() => (
+                    <SimpleTextField 
+                        name="name"
+                        label="Employee Name"
+                        disabled={isSubmitting}
+                    />
+                  )} />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6} md={6}>
                 <Field
-                  name="id"
-                  label="Employee ID"
-                  component={TextField}
-                  fullWidth
                   type="number"
-                  variant="outlined"
-                />
+                  render={() => (
+                    <SimpleTextField 
+                        name="id"
+                        label="Employee ID"
+                        type="number"
+                        disabled={isSubmitting}
+                    />
+                  )} />
               </Grid>
               <Grid item xs={12} md={6}>
-                <FormControl fullWidth variant="outlined">
-                  <InputLabel>
-                  <EmojiPeople fontSize="small" sx={{ marginRight: '5px' }} /> Gender
-                  </InputLabel>
-                  <Field name="gender" as={Select} label={
-                    <>
-                      <EmojiPeople fontSize="small" sx={{ marginRight: '5px' }} /> Gender
-                    </>
-                  }
-                  >
-                    <MenuItem value="male">Male</MenuItem>
-                    <MenuItem value="female">Female</MenuItem>
-                    <MenuItem value="other">Other</MenuItem>
-                  </Field>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Field
-                  name="education"
-                  label={
-                    <>
-                      <School fontSize="small" sx={{ marginRight: '5px' }} /> Education
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                />
-              </Grid>
+              <FormControl fullWidth variant="outlined">
+                <InputLabel>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <EmojiPeople fontSize="small" sx={{ marginRight: '5px' }} /> Gender
+                  </div>
+                </InputLabel>
+                <Field name="gender" as={Select} label={
+                  <div style={{ display: 'flex', textAlign: 'left' }}>
+                    <EmojiPeople fontSize="small" sx={{ marginRight: '5px' }} /> Gender
+                  </div>
+                }
+                disabled={isSubmitting}>
+                  <MenuItem value="male" style={{ display: 'flex', textAlign: 'left' }}>Male</MenuItem>
+                  <MenuItem value="female" style={{ textAlign: 'left' }}>Female</MenuItem>
+                  <MenuItem value="other" style={{ textAlign: 'left' }}>Other</MenuItem>
+                </Field>
+              </FormControl>
+            </Grid>
+
               <Grid item xs={12} md={6}>
                 <Field
-                  name="position"
-                  label={
-                    <>
-                      <SupervisorAccount fontSize="small" sx={{ marginRight: '5px' }} /> Position
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                />
+                  render={() => (
+                    <SimpleTextField 
+                        name="education"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <School fontSize="small" sx={{ marginRight: '5px' }} /> Education
+                            </div>
+                        }
+                        disabled={isSubmitting}
+                    />
+                  )} />
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={6} md={6}>
                 <Field
-                  name="performance"
-                  label={
-                    <>
+                  render={() => (
+                    <SimpleTextField 
+                        name="position"
+                        label={
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <SupervisorAccount fontSize="small" sx={{ marginRight: '5px' }} />
+                              Position
+                            </div>
+                        }
+                        disabled={isSubmitting}
+                    />
+                  )} />
+              </Grid>
+              {/* label={
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                       <Star fontSize="small" sx={{ marginRight: '5px' }} /> Performance (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
-                />
+                    </div>
+                  }    */}
+              <Grid item xs={6} md={6}>
+                <Field
+                  render={() => (
+                    <ProgressSlider 
+                        name="performance"
+                        min={0}
+                        max={100}
+                        defaultValue={0}
+                        header={
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <Star fontSize="small" sx={{ marginRight: '5px' }} />
+                              Employee performance (0-100)
+                            </div>}
+                        disabled={isSubmitting}
+                    />
+                  )} />
               </Grid>
             </Grid>
 
             {/* Skills Section */}
-            <Typography variant="h6" sx={{ marginTop: '20px', marginBottom: '15px', fontFamily: 'Montserrat' }}>
+            <Typography variant="h6" sx={{ marginTop: '20px', marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <CardMembership fontSize="large" sx={{ marginRight: '10px' }} /> Skills
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12} md={6}>
                 <Field
-                  name="communication"
-                  label={
-                    <>
-                      <Chat fontSize="small" sx={{ marginRight: '5px' }} /> Communication (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
-                />
+                  render={() => (
+                    <ProgressSlider 
+                        name="communication"
+                        min={0}
+                        max={100}
+                        defaultValue={0}
+                        header={
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                              <Chat fontSize="small" sx={{ marginRight: '5px' }} />
+                              Communication (0-100)
+                            </div>}
+                        disabled={isSubmitting}
+                  />
+                )}/>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Field
-                  name="creativity"
-                  label={
-                    <>
-                      <Star fontSize="small" sx={{ marginRight: '5px' }} /> Creativity (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
+                render={() => (
+                  <ProgressSlider 
+                      name="creativity"
+                      min={0}
+                      max={100}
+                      defaultValue={0}
+                      header={
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Star fontSize="small" sx={{ marginRight: '5px' }} />
+                            Creativity (0-100)
+                          </div>}
+                    disabled={isSubmitting}
                 />
+              )}/>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Field
-                  name="problem_solving"
-                  label={
-                    <>
-                      <Star fontSize="small" sx={{ marginRight: '5px' }} /> Problem Solving (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
+                render={() => (
+                  <ProgressSlider 
+                      name="problem_solving"
+                      min={0}
+                      max={100}
+                      defaultValue={0}
+                      header={
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Star fontSize="small" sx={{ marginRight: '5px' }} />
+                            Problem Solving (0-100)
+                          </div>}
+                    disabled={isSubmitting}
                 />
+              )}/>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Field
-                  name="teamwork"
-                  label={
-                    <>
-                      <PeopleAlt fontSize="small" sx={{ marginRight: '5px' }} /> Teamwork (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
+                render={() => (
+                  <ProgressSlider 
+                      name="teamwork"
+                      min={0}
+                      max={100}
+                      defaultValue={0}
+                      header={
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Chat fontSize="small" sx={{ marginRight: '5px' }} />
+                            Teamwork (0-100)
+                          </div>}
+                    disabled={isSubmitting}
                 />
+              )}/>
               </Grid>
               <Grid item xs={12} md={6}>
                 <Field
-                  name="time_management"
-                  label={
-                    <>
-                      <ThumbUp fontSize="small" sx={{ marginRight: '5px' }} /> Time Management (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
+                render={() => (
+                  <ProgressSlider 
+                      name="time_management"
+                      min={0}
+                      max={100}
+                      defaultValue={0}
+                      header={
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <Chat fontSize="small" sx={{ marginRight: '5px' }} />
+                            Time Management (0-100)
+                          </div>}
+                    disabled={isSubmitting}
                 />
-              </Grid>
-            </Grid>
-
-            {/* Satisfaction Section */}
-            <Typography variant="h6" sx={{ marginTop: '20px', marginBottom: '15px', fontFamily: 'Montserrat' }}>
-              <ThumbUp fontSize="large" sx={{ marginRight: '10px' }} /> Satisfaction
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} md={6}>
-                <Field
-                  name="workplaceSatisfaction"
-                  label={
-                    <>
-                      <ThumbUp fontSize="small" sx={{ marginRight: '5px' }} /> Workplace Satisfaction (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Field
-                  name="colleagueSatisfaction"
-                  label={
-                    <>
-                      <ThumbUp fontSize="small" sx={{ marginRight: '5px' }} /> Colleague Satisfaction (0-100)
-                    </>
-                  }
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0, max: 100 },
-                  }}
-                />
+              )}/>
               </Grid>
             </Grid>
 
             {/* Feedback Section */}
-            <Typography variant="h6" sx={{ marginTop: '20px', marginBottom: '15px', fontFamily: 'Montserrat' }}>
+            <Typography variant="h6" sx={{ marginTop: '20px', marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Chat fontSize="large" sx={{ marginRight: '10px' }} /> Feedback
             </Typography>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Field
+                <SimpleTextField
                   name="feedback"
                   label="Feedback"
-                  component={TextField}
-                  fullWidth
-                  variant="outlined"
-                  multiline
                   rows={4}
+                  disabled={isSubmitting}
                 />
               </Grid>
             </Grid>
