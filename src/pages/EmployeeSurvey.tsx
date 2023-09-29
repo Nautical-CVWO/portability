@@ -42,17 +42,21 @@ const EmployeeSurvey: React.FC = () => {
   return (
     <Formik
       initialValues={EmployeeSurveyFormInitialValues}
-      onSubmit={(values) => {
+      onSubmit={async (values) => {
         // Handle form submission here
         console.log(values);
         setIsSubmitting(true);
-        writeEmployeeData(values.id, values.name, values.gender, values.education, values.position, values.performance);
-        writeSkillsData(values.id, values.communication, values.creativity, values.problem_solving, values.teamwork, values.time_management);
-        writeFeedbackData(values.id, values.feedback);
-        setTimeout(() => {
-            setIsSubmitting(false); 
-        }, 2000);
-        navigate('/');
+        writeEmployeeData(values.email, values.password, values.id, values.name, values.gender, values.education, values.position, values.performance)
+        .then((result: number) => {
+          console.log(result)
+          writeSkillsData(result, values.communication, values.creativity, values.problem_solving, values.teamwork, values.time_management);
+          writeFeedbackData(result, values.feedback);
+          setTimeout(() => {
+              setIsSubmitting(false); 
+          }, 2000);
+          navigate('/');
+        })
+       
         
         
       }}
@@ -84,6 +88,28 @@ const EmployeeSurvey: React.FC = () => {
             </Typography>
 
             <Grid container spacing={2}>
+            <Grid item xs={6} md={6}>
+                <Field
+                  render={() => (
+                    <SimpleTextField 
+                        name="email"
+                        label="Employee Email"
+                        disabled={isSubmitting}
+                    />
+                  )} />
+              </Grid>
+              <Grid item xs={6} md={6}>
+                <Field
+                  type="number"
+                  render={() => (
+                    <SimpleTextField 
+                        name="password"
+                        label="Password"
+                        type="number"
+                        disabled={isSubmitting}
+                    />
+                  )} />
+              </Grid>
               <Grid item xs={6} md={6}>
                 <Field
                   render={() => (

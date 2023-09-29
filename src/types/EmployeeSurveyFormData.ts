@@ -2,10 +2,19 @@ import { EmployeeSurveyData } from "./survery";
 
 export type EmployeeSurveyFormData = {
     id: number;
+    email: string;
+    password: string;
 } & EmployeeSurveyData;
+
+export type EmployeeLoginData = {
+  email: string,
+  password: string;
+}
 
 
 export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
+  email: "",
+  password: "",
   id: 0,
   name: "",
   gender: '',
@@ -20,6 +29,11 @@ export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
   workplaceSatisfaction: 0,
   colleagueSatisfaction: 0,
   feedback: ""
+};
+
+export const EmployeeLoginInitialValues: EmployeeLoginData = {
+  email: "",
+  password: "",
 };
 
 

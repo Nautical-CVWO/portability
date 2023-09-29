@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Homepage from './pages/Homepage';
 import EmployeeSurvey from './pages/EmployeeSurvey';
 import { ThemeProvider, createMuiTheme } from '@mui/material';
+import SignIn from './pages/SignIn';
 
 const theme = createMuiTheme();
 
@@ -15,6 +16,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="/employee_survey" element={<EmployeeSurvey />} />
+            <Route path="/login" element={<SignIn />} />
           </Routes>
         </BrowserRouter>
       </div>

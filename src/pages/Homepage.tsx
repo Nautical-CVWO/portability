@@ -7,7 +7,6 @@ import CustomButton from '../components/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { readSkillMeanData } from '../backend/command';
 import { PieChart, pieArcClasses, pieArcLabelClasses } from '@mui/x-charts';
-import { isTemplateSpan } from 'typescript';
 interface Skill {
     name: string;
     value: any[];
@@ -65,7 +64,7 @@ const Homepage: React.FC = () => {
                         Do your survey now 
                     </Typography>
                     <Box sx={{ height : '20px'}} />
-                    <CustomButton label="Proceed" onClick={() => navigate('/employee_survey')}  />
+                    <CustomButton label="Proceed" onClick={() => navigate('/login')}  />
                 </Box>
                 <Box sx={{ flex: 1, padding: '30px', paddingLeft: '60px', height: '300px', display:'flex', flexDirection:'column', alignItems: 'flex-start'}}>
                     <Typography variant="h4" sx={{ marginBottom: '15px',  fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color:'white' }}>
