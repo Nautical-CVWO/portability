@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Homepage from './pages/Homepage';
+import { ThemeProvider, createMuiTheme } from '@mui/material';
+
+const theme = createMuiTheme();
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+          </Routes>
+        </BrowserRouter>
+      
+        
+      </div>
+    </ThemeProvider>
+    </>
   );
 }
 
