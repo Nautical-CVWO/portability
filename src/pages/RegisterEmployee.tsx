@@ -11,6 +11,7 @@ import {
   Select,
   MenuItem,
   Box,
+  Checkbox,
 } from "@mui/material";
 import {
   AccountCircle,
@@ -51,7 +52,9 @@ const RegisterEmployee: React.FC = () => {
           values.problem_solving,
           values.teamwork,
           values.time_management,
-          values.feedback
+          values.feedback,
+          true,
+          values.isAdmin
         ) 
         setTimeout(() => {
           setIsSubmitting(false);
@@ -68,7 +71,7 @@ const RegisterEmployee: React.FC = () => {
                 alignItems: "center"
               }}>
                 <Button variant="outlined" onClick={() => navigate('/')}
-                        sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '3px'}}>
+                        sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '10px'}}>
                   <KeyboardDoubleArrowLeft />Return to Homepage
                 </Button>
               </Grid>  
@@ -243,6 +246,20 @@ const RegisterEmployee: React.FC = () => {
                       />
                     )}
                   />
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <div style={{ 
+                    display: "flex",
+                    alignItems: "center",
+                    paddingTop: '5px'
+                  }}>
+                  <Field
+                    as={Checkbox}
+                    name="isAdmin"
+                    label="Employer/Admin"
+                  />
+                    <span>Employer/Admin </span>
+                  </div>
                 </Grid>
                 
               </Grid>

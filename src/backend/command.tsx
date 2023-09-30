@@ -25,7 +25,8 @@ const writeEmployeeData = async (
   teamwork_score: number,
   time_management_score: number,
   feedback: string,
-  isNew: boolean = true
+  isNew: boolean = true,
+  isAdmin: boolean = false,
 ): Promise<any> => {
   const auth = getAuth();
 
@@ -61,7 +62,7 @@ const writeEmployeeData = async (
         id,
         // Set a default value of 0 for a property (e.g., points)
         points: 0,
-        isAdmin: false
+        isAdmin: isAdmin
       });
       writeSkillsData(user, communication_score, creativity_score, problem_solving_score, teamwork_score, time_management_score);
       writeFeedbackData(user, feedback);

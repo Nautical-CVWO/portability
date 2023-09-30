@@ -40,6 +40,7 @@ export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
   colleagueSatisfaction: 0,
   feedback: "",
   skillsReview: "",
+  isAdmin: false,
 };
 
 export const EmployeeLoginInitialValues: EmployeeLoginData = {

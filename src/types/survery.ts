@@ -18,4 +18,5 @@ export interface EmployeeSurveyData {
   colleagueSatisfaction: number;
   feedback: string;
   skillsReview: string;
+  isAdmin: boolean;
 }
