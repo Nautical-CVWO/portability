@@ -15,6 +15,13 @@ export type EmployeeCertData = {
   certUrl: string;
 };
 
+export type WorkshopData = {
+  workshopName: string,
+  workshopPoint: number,
+  workshopDate: string,
+  uid: string
+};
+
 export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
   email: "",
   password: "",
@@ -43,3 +50,10 @@ export const EmployeeLoginInitialValues: EmployeeLoginData = {
 export const EmployeeCertInitialValues: EmployeeCertData = {
   certUrl: ""
 };
+
+export const WorkshopInitialValues : WorkshopData = {
+  workshopName: "",
+  workshopPoint: 0,
+  workshopDate: "",
+  uid: ""
+}

@@ -3,15 +3,26 @@ import {
   Box,
   Button,
   CssBaseline,
+  FormControl,
   IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Toolbar,
   Typography,
 } from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { SetStateAction, useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import naut_logo from '../assets/naut-logo.png'
 import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
+import {
+  logoutData
+} from "../backend/command";
+import { User } from "./Homepage"
+import { ref, onValue, DataSnapshot } from "firebase/database";
+import { db } from '../backend/firebase';
 
 const linkStyle = { 
   textDecoration: "none", // Remove underline
@@ -25,11 +36,29 @@ const buttonStyle = {
 };
 
 interface HeaderProps {
-  user?: string,
-  points?: number
+  user?: User | undefined;
+  setUser: (newUser: User | undefined) => void;
 }
 
-const Header = ({user, points}: HeaderProps) => {
+const menuItemStyle = {
+  "&:hover": {
+    backgroundColor: "black",
+    color: "green", // Change the color to your desired hover color
+  },
+  color: "black",
+  backgroundColor: 'white',
+  border: "1px solid white",
+  fontSize: '13px',
+};
+
+const dropDownStyle = {
+  backgroundColor: '#292A2C',
+  color: "white",
+  fontSize: '14px',
+  padding: '0px',
+};
+
+const Header = ({user, setUser}: HeaderProps) => {
   const navItems = ["Home", "Employee Survey", "Workshop", "Dashboard"];
   const linkItems = [
     "/",
@@ -38,6 +67,47 @@ const Header = ({user, points}: HeaderProps) => {
     "https://nautical-analytics.streamlit.app/",
   ];
   const handleDrawerToggle = () => {};
+  // const location = useLocation();
+  const navigate = useNavigate(); 
+  const [userSelectedValue, setUserSelectedValue] = useState("points");
+  const handleUserSelectionChange = (event: SelectChangeEvent) => {
+    setUserSelectedValue(event.target.value);
+  };
+
+  const [userPoints, setUserPoints] = useState(0);
+
+  useEffect(() => {
+    setUserSelectedValue("points");
+    const reference = ref(db, `employees/${user?.uid}/`);
+  
+    const onDataChange = (snapshot : DataSnapshot) => {
+      if (snapshot.exists()) {
+        const userData = snapshot.val();
+        if (userData && userData.points !== undefined) {
+          setUserPoints(userData.points);
+        }
+      }
+    };
+  
+    // Set up a real-time listener for changes
+    const unsubscribe = onValue(reference, onDataChange);
+  
+    // Return a cleanup function to remove the listener when the component unmounts
+    return () => {
+      unsubscribe(); // Remove the real-time listener
+    };
+  
+  }, [user]);
+  
+
+  const logout = () => {
+    logoutData().then((res) => {
+      alert(res)
+      
+    }).then(() => navigate('/')).then(() => navigate(0))
+    
+  }
+
   return (
     <Box sx={{ display: "flex", color: "#161616" }}>
       <CssBaseline />
@@ -61,24 +131,39 @@ const Header = ({user, points}: HeaderProps) => {
             
             NAUTICAL
           </Typography>
-          <Box sx={{ marginRight: '15px', display: { xs: "none", sm: "block" } }}>
-            {user === "" ? <></> : (
-              <Button
-                sx={{
-                  "&:hover": {
-                    backgroundColor: "black",
-                    color: "white", // Change the color to your desired hover color
-                  },
-                  color: "black",
-                  backgroundColor: 'white',
-                  border: "1px solid white"
-                }}
-              >
-                 Welcome, {user} you have {points} 
-                 <Inventory2RoundedIcon sx={{marginLeft: '5px'}} />
-              </Button>
-            )}
-          </Box>
+ 
+          {user === undefined ? <></> : (
+            <FormControl sx={{ padding: '0px' }}>
+              {/* <InputLabel>Welcome, {user} you have {points} </InputLabel> */}
+              <Select
+                value={userSelectedValue}
+                onChange={handleUserSelectionChange}
+                sx={dropDownStyle}
+              > 
+                  <MenuItem value="points" sx={menuItemStyle}>
+                  <div style={{
+                    display: "flex", 
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}>
+                    <div>
+                        {`Welcome, ${user?.username} you have ${userPoints}`.toUpperCase()}
+                    </div>
+                    <div>
+                      <Inventory2RoundedIcon sx={{marginLeft: '5px', fontSize: '14px', marginTop: '5px'}} />
+                    </div>
+                  </div>
+                  </MenuItem>
+                
+                  <MenuItem onClick={() => {
+                    setUser(undefined);
+                    logout();
+                  }} value="logout" sx={menuItemStyle}>LOGOUT</MenuItem>
+              </Select>
+            </FormControl>
+            
+          )}
+      
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((index, item) => (
               <Button

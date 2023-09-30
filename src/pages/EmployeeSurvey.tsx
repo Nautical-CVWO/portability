@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { EmployeeSurveyFormInitialValues } from "../types/EmployeeSurveyFormData";
 import {
   Card,
   Grid,
-  TextField,
   Typography,
   Button,
   FormControl,
@@ -12,42 +11,102 @@ import {
   Select,
   MenuItem,
   Box,
-  Slider,
-  Icon,
+  Autocomplete,
 } from "@mui/material";
 import {
   AccountCircle,
   CardMembership,
-  PeopleAlt,
   EmojiPeople,
   School,
   Star,
   Chat,
-  ThumbUp,
   SupervisorAccount,
-  KeyboardDoubleArrowDown,
   KeyboardDoubleArrowLeft,
 } from "@mui/icons-material";
 import {
+  readUserData,
+  readUserEmails,
   writeEmployeeData,
-  writeSkillsData,
-  writeFeedbackData,
 } from "../backend/command";
 import SimpleTextField from "../components/SimpleTextField";
 import ProgressSlider from "../components/ProgressSlider";
 import { useNavigate } from "react-router-dom";
 import bgm from '../assets/bgm.png'
 import naut_logo_gray from '../assets/naut-logo-gray.png'
+import { User } from "./Homepage";
+
+type IEmail = {
+  label: string;
+  id: number;
+}
+
 
 const EmployeeSurvey: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  const [employeeEmails, setEmployeeEmails] = useState<IEmail[]>([])
+  const [emailToRefMap, setEmailToRefMap] = useState<{[ref: string]: string}>({});
+
+  const [currPopulateUser, setCurrPopulateUser] = useState<populateUser>();
+  const [currSelectedUserRef, setCurrSelectedUserRef] = useState("");
+  // Change population data
+  useEffect(() => {
+      readUserData(currSelectedUserRef).then((result) => {
+          const user: populateUser = {
+              
+              education: result.education,
+              username: result.name,
+              gender: result.gender,
+              position:result.position,
+              id: result.id
+              
+              // Add other properties as needed
+          } as populateUser;
+          setCurrPopulateUser(user);
+      }).catch((err) => {
+          throw new Error(err.message)
+      });
+    }, [currSelectedUserRef])
+    // Get emails and get map from email to hash
+  useEffect(() => {
+    readUserEmails().then((res) => {
+      setEmployeeEmails(
+        Object.values(res).map((e: any, idx: number) => ({
+          "label": e.email || "No email" + String(idx),
+          "id": idx + 1,
+        } as IEmail)
+      ));
+      
+      setEmailToRefMap(() => {
+        const newMap: {[ref: string]: string} = {};
+        for (const entry of Object.keys(res)) {
+          const resEntry = res[entry as keyof typeof res];          
+          newMap[resEntry.email] = entry;   
+        }
+    
+        return newMap;
+      });
+    })
+  });
+  
+  type populateUser = User & {
+    education: string,
+    username: string,
+    gender: string,
+    position: string,
+    id: number,
+  }
+  
+  
+  const initialValues = { ...EmployeeSurveyFormInitialValues, ...currPopulateUser };
+  
   return (
     <Formik
-      initialValues={EmployeeSurveyFormInitialValues}
+      initialValues={initialValues}
       onSubmit={(values) => {
         // Handle form submission here
-        console.log(values);
+        console.log("VALUES ARE", values);
         setIsSubmitting(true);
         writeEmployeeData(
           values.email,
@@ -58,17 +117,15 @@ const EmployeeSurvey: React.FC = () => {
           values.education,
           values.position,
           values.performance,
-          values.skillsReview
-        );
-        writeSkillsData(
-          values.id,
+          values.skillsReview,
           values.communication,
           values.creativity,
           values.problem_solving,
           values.teamwork,
-          values.time_management
-        );
-        writeFeedbackData(values.id, values.feedback);
+          values.time_management,
+          values.feedback,
+          false
+        )
         setTimeout(() => {
           setIsSubmitting(false);
         }, 2000);
@@ -76,29 +133,29 @@ const EmployeeSurvey: React.FC = () => {
       }}
     >
       {(formikProps: FormikProps<any>) => (
-        <div style={{ backgroundImage: `url(${bgm})`, width: "100%", height: "100%", paddingTop: "3%"}}>
+        <div style={{ backgroundImage: `url(${bgm})`, paddingTop: "3%", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", minHeight: '100vh', paddingBottom: "3%" }}>
           <Form >
             <Grid container>
               <Grid item xs={3}>
                 <Button variant="outlined" onClick={() => navigate('/')}
-                        sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '-3px' }}>
+                  sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '3px' }}>
                   <KeyboardDoubleArrowLeft />Return to Homepage
                 </Button>
-              </Grid>  
+              </Grid>
               <Grid item xs={6}>
                 <Typography
-                    variant="h3"
-                    sx={{
-                      fontFamily: "Montserrat",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "white",
-                      paddingRight: '23px',
-                      marginBottom: '30px'
-                    }}
+                  variant="h3"
+                  sx={{
+                    fontFamily: "Montserrat",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    paddingRight: '23px',
+                    marginBottom: '30px'
+                  }}
                 >
-                  <img src={naut_logo_gray} alt="logo" height="60px" width="60px" style={{ marginRight: '5px' }}/>
+                  <img src={naut_logo_gray} alt="logo" height="60px" width="60px" style={{ marginRight: '5px' }} />
                   Employee Survey
                 </Typography>
               </Grid>
@@ -110,15 +167,18 @@ const EmployeeSurvey: React.FC = () => {
                 padding: "30px",
                 borderRadius: "12px",
                 boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-                opacity: '80%'
+                opacity: '90%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start'
               }}
-            >      
+            >
 
               {/* Employee Information Section */}
               <Typography
                 variant="h6"
                 sx={{
-                  marginBottom: "15px",
+                  marginBottom: "20px",
                   fontFamily: "Montserrat",
                   display: "flex",
                   alignItems: "center",
@@ -130,18 +190,30 @@ const EmployeeSurvey: React.FC = () => {
               </Typography>
 
               <Grid container spacing={2}>
-              <Grid item xs={6} md={6}>
+                <Grid item xs={6} md={6}>
                   <Field
                     render={() => (
-                      <SimpleTextField
-                        name="email"
-                        label="Employee Email"
-                        disabled={isSubmitting}
+                      <Autocomplete
+                        options={employeeEmails}
+                        defaultValue={employeeEmails[0]}
+                        isOptionEqualToValue={(option, value) => {
+                          return option.label === value.label;
+                        }}  
+                        onSelect={(event: any) => {
+                          formikProps.setFieldValue("email", event.target.value)
+                          setCurrSelectedUserRef(emailToRefMap[event.target.value])
+                        }}  
+                        renderInput={(params) => <SimpleTextField
+                          name="email"
+                          label="Employee Email"
+                          {...params}
+                        />
+                      }
                       />
                     )}
                   />
                 </Grid>
-                <Grid item xs={6} md={6}>
+                {/* <Grid item xs={6} md={6}>
                   <Field
                     type="number"
                     render={() => (
@@ -153,7 +225,7 @@ const EmployeeSurvey: React.FC = () => {
                       />
                     )}
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={6} md={6}>
                   <Field
                     render={() => (
@@ -192,6 +264,7 @@ const EmployeeSurvey: React.FC = () => {
                     <Field
                       name="gender"
                       as={Select}
+                      initialValue="other"
                       label={
                         <div style={{ display: "flex", textAlign: "left" }}>
                           <EmojiPeople
@@ -262,7 +335,7 @@ const EmployeeSurvey: React.FC = () => {
                         <Star fontSize="small" sx={{ marginRight: '5px' }} /> Performance (0-100)
                       </div>
                     }    */}
-                <Grid item xs={6} md={6}>
+                <Grid item xs={12} md={12}>
                   <Field
                     render={() => (
                       <ProgressSlider
@@ -273,7 +346,19 @@ const EmployeeSurvey: React.FC = () => {
                         header={
                           <div style={{ display: "flex", alignItems: "center" }}>
                             <Star fontSize="small" sx={{ marginRight: "5px" }} />
-                            Employee performance (0-100)
+                            <Typography
+                              variant="h6"
+                              sx={{
+                                marginTop: "20px",
+                                marginBottom: "20px",
+                                fontFamily: "Montserrat",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                            >
+                              Employee performance (0-100)
+                            </Typography>
                           </div>
                         }
                         disabled={isSubmitting}
@@ -288,7 +373,7 @@ const EmployeeSurvey: React.FC = () => {
                 variant="h6"
                 sx={{
                   marginTop: "20px",
-                  marginBottom: "15px",
+                  marginBottom: "20px",
                   fontFamily: "Montserrat",
                   display: "flex",
                   alignItems: "center",
@@ -401,7 +486,7 @@ const EmployeeSurvey: React.FC = () => {
                 variant="h6"
                 sx={{
                   marginTop: "20px",
-                  marginBottom: "15px",
+                  marginBottom: "20px",
                   fontFamily: "Montserrat",
                   display: "flex",
                   alignItems: "center",
@@ -425,7 +510,7 @@ const EmployeeSurvey: React.FC = () => {
                 variant="h6"
                 sx={{
                   marginTop: "20px",
-                  marginBottom: "15px",
+                  marginBottom: "20px",
                   fontFamily: "Montserrat",
                   display: "flex",
                   alignItems: "center",

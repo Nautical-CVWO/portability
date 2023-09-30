@@ -6,6 +6,9 @@ import { ThemeProvider, createMuiTheme } from '@mui/material';
 import SignIn from './pages/SignIn';
 import Cert from './pages/Cert';
 import Workshop from './pages/Workshop';
+import RegisterEmployee from './pages/RegisterEmployee';
+import TipsPage from './pages/TipsPage';
+import TestTips from './pages/TestTips';
 
 const theme = createMuiTheme();
 
@@ -19,8 +22,11 @@ function App() {
             <Route path="/" element={<Homepage />} />
             <Route path="/employee_survey" element={<EmployeeSurvey />} />
             <Route path="/login" element={<SignIn />} />
+            <Route path="/register" element={<RegisterEmployee />} />
             <Route path="/cert" element={<Cert />} />
             <Route path="/workshop" element={<Workshop />} />
+            <Route path="/tips" element={<TipsPage />} />
+            <Route path="/testtips" element={<TestTips />} />
           </Routes>
         </BrowserRouter>
       </div>

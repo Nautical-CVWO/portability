@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { TextField } from '@mui/material';
-import { useFormikContext } from 'formik';
+import { FieldProps, useFormikContext } from 'formik';
 
 interface SimpleTextFieldProps {
     name: string;
@@ -16,7 +16,6 @@ interface SimpleTextFieldProps {
 const SimpleTextField = ({name, label, type="text", rows=1, multiline = true, disabled = false, ...props}: SimpleTextFieldProps) => {
 
     const formik = useFormikContext();
-
     return (
         <TextField 
             name={name}

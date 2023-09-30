@@ -18,18 +18,32 @@ const SignIn: React.FC = () => {
 
 
     return (
-        <Container disableGutters={true} maxWidth={false}  sx={{ backgroundColor: '#161616', maxWith:'100%', width: "100%", height: 'min-content', padding: '0px', margin:'0px'}}>
-            <Header />
+        <Container disableGutters={true} maxWidth={false}  sx={{ backgroundColor: '#161616', maxWith:'100%', width: "100%", height: 'min-content', minHeight: "100vh", padding: '0px', margin:'0px'}}>
+            <Header user={undefined} setUser={() => {}} />
+            <Box sx={{ width: '100%', display:'flex', flexDirection: 'column', alignItems:'center', justifyContent: 'center'}}>
+            <Box sx={{ width: '70%', borderRadius: '20px', margin : '20px', backgroundColor: 'white', padding: '20%', paddingTop: '50px'}}>
+            <Typography
+                variant="h6"
+                sx={{
+                  marginBottom: "15px",
+                  fontFamily: "Montserrat",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+            >Employee Login</Typography>
             <Formik
                 initialValues={EmployeeLoginInitialValues}
                 onSubmit={(values) => {
                     // Handle form submission here
                     setIsSubmitting(true);
-                    writeLoginData(values.email, values.password);
-                    setTimeout(() => {
+                    writeLoginData(values.email, values.password).then((res) => {
                         setIsSubmitting(false); 
-                    }, 2000);
-                    navigate('/');
+                        navigate('/');
+                    }).catch((err) => {
+                        alert(err.message)
+                    });
+                    
                 }}
             >
             {(formikProps: FormikProps<any>) => (
@@ -44,6 +58,7 @@ const SignIn: React.FC = () => {
                             />
                         )} />
                     </Grid>
+                    <Box sx={{height: '20px'}}></Box>
                     <Grid item xs={6} md={6}>
                         <Field
                         render={() => (
@@ -54,14 +69,18 @@ const SignIn: React.FC = () => {
                             />
                         )} />
                     </Grid>
-                    <Box mt={3}>
-                    <Button type="submit" variant="contained" color="primary" fullWidth>
-                        Submit
+                    <Box my={5} mt={3}>
+                    <Button type="submit" variant="outlined" color="inherit" fullWidth>
+                        Login
                     </Button>
                     </Box>
                 </Form>
             )}
             </Formik>
+        </Box>
+            </Box>
+           
+   
         </Container>
     )
 }
