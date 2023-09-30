@@ -36,7 +36,7 @@ const Homepage: React.FC = () => {
     useEffect(() => {
         readCurrentUserData()
             .then((res) => {
-                if (res != undefined) {
+                if (res !== undefined) {
                     readUserData(res).then((result) => {
                         console.log(result)
                         const user: User = {
