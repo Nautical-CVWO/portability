@@ -8,22 +8,22 @@ const TestTips: React.FC = () => {
     return (
     <>
         <Tips uid={''} cards={[
-            { media: MediaDataSet.BGM,
+            { media: 'BGM',
               title: "Card 1",
               description: "Desc 1",
               link: "https://www.google.com"
             },
-            { media: MediaDataSet.BGM,
+            { media: 'BGM',
               title: "Card 1",
               description: "Desc 1",
               link: "https://www.google.com"
             },
-            { media: MediaDataSet.BGM,
+            { media: 'BGM',
                 title: "Card 1",
                 description: "Desc 1",
                 link: "https://www.google.com"
               },
-              { media: MediaDataSet.BGM,
+              { media: 'BGM',
                 title: "Card 1",
                 description: "Desc 1",
                 link: "https://www.google.com"

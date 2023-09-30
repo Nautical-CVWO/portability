@@ -1,16 +1,13 @@
-import { Box, Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Button, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import React, {  } from 'react';
 import bgm from '../assets/bgm.png'
-import { useNavigate } from 'react-router-dom';
-import { User } from './Homepage';
-import { readCurrentUserData, readUserData } from '../backend/command';
 
-export enum MediaDataSet {
-  BGM = "bgm",
+export const MediaDataSet = {
+  BGM: bgm,
 }
 
 export interface TipsCard {
-  media: MediaDataSet;
+  media: keyof typeof MediaDataSet;
   title: string;
   description: string;
   link: string;
@@ -60,7 +57,7 @@ const Tips: React.FC<TipsProps> = ({uid, cards}: TipsProps) => {
                     <Card sx={{ minWidth: '69vw', margin: '10px', border: '1px solid #a4d302' }}>
                         <CardMedia
                             sx={{ height: 140 }}
-                            src="../assets/bgm.png"
+                            image={MediaDataSet[card.media]}
                         />
                         <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
