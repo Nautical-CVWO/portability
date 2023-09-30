@@ -64,13 +64,12 @@ const Workshop: React.FC = () => {
                 unsubscribe();
             }
         }
-
         fetchWorkshops();
     }, [])
 
 
     return (
-        <Container disableGutters={true} maxWidth={false}  sx={{ backgroundColor: '#161616', maxWith:'100%', width: "100%", height: 'min-content', padding: '0px', margin:'0px'}}>
+        <Container disableGutters={true} maxWidth={false}  sx={{ backgroundColor: '#161616', maxWith:'100%', width: "100%", minHeight: '150vh', padding: '0px', margin:'0px'}}>
             <Header user={user} setUser={handleSetUser} />
                 <Box sx={{ padding: '30px', paddingLeft: '60px', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                 <Typography variant="h4" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', textAlign: 'left', color: 'white' }}>
@@ -83,7 +82,7 @@ const Workshop: React.FC = () => {
                 </Box>
 
 
-            { user?.isAdmin ? (<Box>
+    { user?.isAdmin ? (<Box>
     <div style={{ maxWidth: '600px', margin: '0 auto' }}>
       <div style={{ background: 'white', padding: '20px', borderRadius: '8px', boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}>
         <Typography variant="h6" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'black' }}>
@@ -106,9 +105,11 @@ const Workshop: React.FC = () => {
             <Form>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <SimpleTextField
-                    name="workshopName"
-                    label="Workshop Name"
+                <Field
+                    type="text"
+                    as={SimpleTextField}
+                    name = "workshopName"
+                    label= "Workshop Name"
                     disabled={formikProps.isSubmitting}
                   />
                 </Grid>
@@ -123,6 +124,7 @@ const Workshop: React.FC = () => {
                   <SimpleTextField
                     name="workshopPoint"
                     label="Workshop Points"
+                    type = "number"
                     disabled={formikProps.isSubmitting}
                   />
                 </Grid>

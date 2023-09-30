@@ -248,6 +248,18 @@ const writeCertData = (uid: string, url: string): void => {
     url : url
   }
   push(ref(db, `${dataLocation}/${uid}`), certUrl);
+  const participantsData: { [key: string]: string } = {};
+  participantsData[uid] = uid;
+  const referencePoint = ref(db, `employees/${uid}`);
+    get(referencePoint)
+     .then((snapshot) => {
+      if (snapshot.exists()) {
+        let currPoints = Number(snapshot.val().points);
+        currPoints = Number(currPoints) + Number(50);
+        update(ref(db, `employees/${uid}/`), {"points": currPoints});
+
+      }
+     })
 };
 
 const logoutData = (): Promise<any> => {
@@ -401,6 +413,56 @@ const deleteWorkshop = (
   remove(ref(db, `workshops/${workshopName}`));
 }
 
+
+const findCertificateKeyByUrl = async (uid: string, urlToFind: string) => {
+  try {
+    const certificateRef = ref(db, `certificate/${uid}`);
+    const snapshot = await get(certificateRef);
+
+    if (snapshot.exists()) {
+      const certificates = snapshot.val();
+      for (const key in certificates) {
+        if (certificates[key].url === urlToFind) {
+          return key; // Return the key when the URL matches
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error finding certificate key:", error);
+  }
+
+  return null; // Return null if the URL is not found
+};
+
+const handleDeleteCertificate = async (uid: string, certificateUrl: string) => {
+  try {
+    // Remove the certificate from the database
+    const certificateRef = ref(db, `certificate/${uid}`);
+    const snapshot = await get(certificateRef);
+    if (snapshot.exists()) {
+      const certificates = snapshot.val();
+      const updatedCertificates = { ...certificates };
+      const key = await findCertificateKeyByUrl(uid, certificateUrl);
+      delete updatedCertificates[key as string];
+      await set(ref(db, `certificate/${uid}`), updatedCertificates);
+    }
+
+    // Update user's points
+    const userRef = ref(db, `employees/${uid}`);
+    const userSnapshot = await get(userRef);
+    if (userSnapshot.exists()) {
+      const userData = userSnapshot.val();
+      const currPoints = userData.points || 0;
+      const newPoints = currPoints - 50; // Subtract 50 points for deleting a certificate
+      await update(ref(db, `employees/${uid}`), { points: newPoints });
+    }
+  } catch (error) {
+    console.error("Error deleting certificate:", error);
+  }
+};
+
+
+
 export {
   writeEmployeeData,
   writeLoginData,
@@ -414,5 +476,6 @@ export {
   readUserEmails,
   participateWorkshop,
   cancelParticipation,
-  deleteWorkshop
+  deleteWorkshop,
+  handleDeleteCertificate
 };

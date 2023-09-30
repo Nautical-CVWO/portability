@@ -29,7 +29,7 @@ const SimpleTextField = ({name, label, type="text", rows=1, multiline = false, d
             disabled={disabled}
             // placeholder={placeholder}
             // sx={formik.dirty ? {} : { color: 'white' }}
-            InputProps={formik.values["email"] !== undefined ? {} : { style: { color: 'white' }}}
+            InputProps={formik.values["email"] !== undefined ? {} : { style: { color: 'black' }}}
             {...props}       
         />
     );
