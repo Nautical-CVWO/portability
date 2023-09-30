@@ -4,6 +4,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
 } from "firebase/auth";
 
 const writeEmployeeData = async (
@@ -43,6 +44,8 @@ const writeEmployeeData = async (
         position,
         performance,
         skillsReview,
+        // Set a default value of 0 for a property (e.g., points)
+        points: 0,
       });
       return user.uid; // Return user.uid on success
     }
@@ -124,6 +127,36 @@ const readSkillMeanData = async (): Promise<any> => {
   return data;
 };
 
+const readUserData = async (uid: string): Promise<any> => {
+    const dataLocation = "employees";
+    const reference = ref(db, `${dataLocation}/${uid}`);
+    const data = await get(reference)
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          return snapshot.val();
+        }
+      })
+      .catch((error) => {
+        console.log("Failed to fetch data:", error.message);
+      });
+    return data;
+  };
+
+const readCurrentUserData = async (): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                resolve(user.uid);
+            } else {
+                reject(new Error("Something wrong"));
+            }
+            // Don't forget to unsubscribe when done.
+            unsubscribe();
+        });
+    });
+};
+
 const writeSatisfactionData = (
   id: number,
   workplaceSatisfaction_score: number,
@@ -172,4 +205,6 @@ export {
   writeLoginData,
   writeFeedbackData,
   readSkillMeanData,
+  readCurrentUserData,
+  readUserData
 };

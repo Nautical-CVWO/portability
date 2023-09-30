@@ -11,6 +11,10 @@ export type EmployeeLoginData = {
   password: string;
 };
 
+export type EmployeeCertData = {
+  certUrl: string;
+};
+
 export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
   email: "",
   password: "",
@@ -34,4 +38,8 @@ export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
 export const EmployeeLoginInitialValues: EmployeeLoginData = {
   email: "",
   password: "",
+};
+
+export const EmployeeCertInitialValues: EmployeeCertData = {
+  certUrl: ""
 };

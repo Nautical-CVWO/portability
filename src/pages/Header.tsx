@@ -11,6 +11,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import naut_logo from '../assets/naut-logo.png'
+import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
 
 const linkStyle = { 
   textDecoration: "none", // Remove underline
@@ -23,7 +24,12 @@ const buttonStyle = {
   },
 };
 
-const Header = () => {
+interface HeaderProps {
+  user?: string,
+  points?: number
+}
+
+const Header = ({user, points}: HeaderProps) => {
   const navItems = ["Home", "Employee Survey", "Dashboard"];
   const linkItems = [
     "/",
@@ -54,6 +60,24 @@ const Header = () => {
             
             NAUTICAL
           </Typography>
+          <Box sx={{ marginRight: '15px', display: { xs: "none", sm: "block" } }}>
+            {user === "" ? <></> : (
+              <Button
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "black",
+                    color: "white", // Change the color to your desired hover color
+                  },
+                  color: "black",
+                  backgroundColor: 'white',
+                  border: "1px solid white"
+                }}
+              >
+                 Welcome, {user} you have {points} 
+                 <Inventory2RoundedIcon sx={{marginLeft: '5px'}} />
+              </Button>
+            )}
+          </Box>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             {navItems.map((index, item) => (
               <Button
@@ -69,6 +93,7 @@ const Header = () => {
               </Button>
             ))}
           </Box>
+          
         </Toolbar>
       </AppBar>
       <nav></nav>
