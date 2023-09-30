@@ -4,17 +4,43 @@ import { Container, Typography, Box } from '@mui/material';
 import bgm from '../assets/bgm.png'
 import CustomButton from '../components/CustomButton';
 import { useNavigate } from 'react-router-dom';
-import { readSkillMeanData } from '../backend/command';
+import { readCurrentUserData, readSkillMeanData, readUserData } from '../backend/command';
 import { PieChart, pieArcClasses } from '@mui/x-charts';
 interface Skill {
     name: string;
     value: any[];
   }
-
+interface User {
+    // Define the properties of your User interface here
+    uid: string;
+    username: string;
+    points?: number;
+    // Add other properties as needed
+}
 const Homepage: React.FC = () => {
     const navigate = useNavigate();
+    const [user, setUser] = useState<User | undefined>();
     const [skills, setSkills] = useState<Skill[]>([]);
     useEffect(() => {
+        readCurrentUserData()
+        .then((res) => {
+            readUserData(res).then((result) => {
+                console.log(result)
+                const user: User = {
+                    uid: res,
+                    points: result.points ? result.points : 0,
+                    username: result.name,
+                    // Add other properties as needed
+                };
+                setUser(user);
+            }).catch((err) => {
+                throw new Error(err.message)
+            })
+            
+        }).catch((err) => {
+            throw new Error(err.message)
+        })
+
         readSkillMeanData()
         .then((data) => {
             // Convert the object into an array of objects
@@ -32,7 +58,7 @@ const Homepage: React.FC = () => {
 
     return (
         <Container disableGutters={true} maxWidth={false}  sx={{ backgroundColor: '#161616', maxWith:'100%', width: "100%", height: 'min-content', padding: '0px', margin:'0px'}}>
-            <Header />
+            <Header points={user?.points} user={user?.username}  />
             <Box sx={{ height: '350px', backgroundImage: `url(${bgm})`, backgroundSize: 'cover',  display:'flex', flexDirection:'row', alignItems: 'center'}}>
                 <Box sx={{ backgroundColor: 'white', height:' 10%', flex: 3, alignItems: 'center'}}></Box>
                 <Typography variant="h1" sx={{ marginBottom: '15px', flex: 3, fontFamily: 'Montserrat', display: 'flex', alignItems: 'center', justifyContent: 'center', color:'white' }}>
@@ -45,10 +71,10 @@ const Homepage: React.FC = () => {
                     HR Management System
                 </Typography>
                 <Typography variant="h6" sx={{ marginBottom: '15px',fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color:'white' }}>
-                Introducing Nautical, the cutting-edge HR solution designed to empower
-                 HR teams in the pursuit of nurturing a future-ready workforce. 
-                 In an era of constant change and evolving business landscapes,
-                  our platform equips organizations with the tools and insights needed to thrive.
+                    Introducing Nautical, the cutting-edge HR solution designed to empower
+                    HR teams in the pursuit of nurturing a future-ready workforce. 
+                    In an era of constant change and evolving business landscapes,
+                    our platform equips organizations with the tools and insights needed to thrive.
                 </Typography>
             </Box>
 

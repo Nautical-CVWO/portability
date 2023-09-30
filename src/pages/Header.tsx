@@ -30,10 +30,11 @@ interface HeaderProps {
 }
 
 const Header = ({user, points}: HeaderProps) => {
-  const navItems = ["Home", "Employee Survey", "Dashboard"];
+  const navItems = ["Home", "Employee Survey", "Workshop", "Dashboard"];
   const linkItems = [
     "/",
     "/employee_survey",
+    '/workshop',
     "https://nautical-analytics.streamlit.app/",
   ];
   const handleDrawerToggle = () => {};
