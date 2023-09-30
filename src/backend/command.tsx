@@ -46,6 +46,7 @@ const writeEmployeeData = async (
         skillsReview,
         // Set a default value of 0 for a property (e.g., points)
         points: 0,
+        isAdmin: false
       });
       return user.uid; // Return user.uid on success
     }
