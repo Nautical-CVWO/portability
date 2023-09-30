@@ -130,12 +130,12 @@ const RegisterEmployee: React.FC = () => {
                 </Grid>
                 <Grid item xs={6} md={6}>
                   <Field
-                    type="number"
+                    type="password"
                     render={() => (
                       <SimpleTextField
                         name="password"
                         label="Employee password"
-                        type="number"
+                        type="password"
                         disabled={isSubmitting}
                       />
                     )}

@@ -13,7 +13,7 @@ interface SimpleTextFieldProps {
     // placeholder: any;
 }
 
-const SimpleTextField = ({name, label, type="text", rows=1, multiline = true, disabled = false, ...props}: SimpleTextFieldProps) => {
+const SimpleTextField = ({name, label, type="text", rows=1, multiline = false, disabled = false, ...props}: SimpleTextFieldProps) => {
 
     const formik = useFormikContext();
     return (
@@ -23,7 +23,7 @@ const SimpleTextField = ({name, label, type="text", rows=1, multiline = true, di
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}  
             fullWidth
-            multiline
+            multiline={multiline}
             type={type}
             rows={rows}
             disabled={disabled}

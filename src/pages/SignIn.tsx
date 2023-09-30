@@ -66,6 +66,7 @@ const SignIn: React.FC = () => {
                                 name="password"
                                 label="Password"
                                 disabled={isSubmitting}
+                                type="password"
                             />
                         )} />
                     </Grid>

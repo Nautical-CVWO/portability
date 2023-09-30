@@ -502,6 +502,7 @@ const EmployeeSurvey: React.FC = () => {
                     label="Feedback"
                     rows={4}
                     disabled={isSubmitting}
+                    multiline
                   />
                 </Grid>
               </Grid>
@@ -527,6 +528,7 @@ const EmployeeSurvey: React.FC = () => {
                     label="Skills Review (What skills do you wish to improve/learn the most?)"
                     rows={4}
                     disabled={isSubmitting}
+                    multiline
                   />
                 </Grid>
               </Grid>

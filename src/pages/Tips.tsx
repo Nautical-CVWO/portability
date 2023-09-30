@@ -47,7 +47,7 @@ const Tips: React.FC<TipsProps> = ({uid, cards}: TipsProps) => {
     // }, []);
 
     return (
-    <div style={{ height: '100vh', backgroundImage: `url(${bgm})`, backgroundSize: 'cover', paddingTop: '10%' }}>
+    <div style={{ backgroundImage: `url(${bgm})`, backgroundSize: 'cover', padding: '10% 0% 10% 0%' }}>
         <Card sx={{ marginLeft: '12%', marginRight: '12%',
                     display: 'flex', alignItems: 'center',
                     flexDirection: "column", backgroundColor: "#404040",
