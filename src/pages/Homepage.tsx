@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Header from './Header';
-import EmployeeSurvey from './EmployeeSurvey';
 import { Container, Typography, Box } from '@mui/material';
 import bgm from '../assets/bgm.png'
 import CustomButton from '../components/CustomButton';
 import { useNavigate } from 'react-router-dom';
 import { readSkillMeanData } from '../backend/command';
-import { PieChart, pieArcClasses, pieArcLabelClasses } from '@mui/x-charts';
+import { PieChart, pieArcClasses } from '@mui/x-charts';
 interface Skill {
     name: string;
     value: any[];

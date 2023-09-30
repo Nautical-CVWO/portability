@@ -10,8 +10,9 @@ import {
 import React from "react";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
+import naut_logo from '../assets/naut-logo.png'
 
-const linkStyle = {
+const linkStyle = { 
   textDecoration: "none", // Remove underline
   color: "white",
 };
@@ -43,12 +44,14 @@ const Header = () => {
             sx={{ mr: 2, display: { sm: "none" } }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton >
+          <img src={naut_logo} alt="logo" height="40px" width="40px" style={{ marginRight: '5px' }}/>
           <Typography
             variant="h6"
             component="div"
             sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
           >
+            
             NAUTICAL
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
