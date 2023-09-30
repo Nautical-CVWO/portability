@@ -1,25 +1,24 @@
 import { EmployeeSurveyData } from "./survery";
 
 export type EmployeeSurveyFormData = {
-    id: number;
-    email: string;
-    password: string;
+  id: number;
+  email: string;
+  password: string;
 } & EmployeeSurveyData;
 
 export type EmployeeLoginData = {
-  email: string,
+  email: string;
   password: string;
-}
-
+};
 
 export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
   email: "",
   password: "",
   id: 0,
   name: "",
-  gender: '',
-  education: '',
-  position: '',
+  gender: "",
+  education: "",
+  position: "",
   performance: 0,
   communication: 0,
   creativity: 0,
@@ -28,12 +27,11 @@ export const EmployeeSurveyFormInitialValues: EmployeeSurveyFormData = {
   time_management: 0,
   workplaceSatisfaction: 0,
   colleagueSatisfaction: 0,
-  feedback: ""
+  feedback: "",
+  skillsReview: "",
 };
 
 export const EmployeeLoginInitialValues: EmployeeLoginData = {
   email: "",
   password: "",
 };
-
-
