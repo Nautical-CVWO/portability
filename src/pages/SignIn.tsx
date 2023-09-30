@@ -41,9 +41,9 @@ const SignIn: React.FC = () => {
                         setIsSubmitting(false); 
                         navigate('/');
                     }).catch((err) => {
-                        alert(err.message)
+                        alert("Incorrect credentials. Try again.")
+                        setIsSubmitting(false); 
                     });
-                    
                 }}
             >
             {(formikProps: FormikProps<any>) => (
@@ -70,11 +70,12 @@ const SignIn: React.FC = () => {
                             />
                         )} />
                     </Grid>
-                    <Box my={5} mt={3}>
+                    {/* <Box my={5} mt={3}> */}
+                    <br />
                     <Button type="submit" variant="outlined" color="inherit" fullWidth>
                         Login
                     </Button>
-                    </Box>
+                    {/* </Box> */}
                 </Form>
             )}
             </Formik>

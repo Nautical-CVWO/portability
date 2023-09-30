@@ -38,6 +38,7 @@ const buttonStyle = {
 interface HeaderProps {
   user?: User | undefined;
   setUser: (newUser: User | undefined) => void;
+  isAdmin?: boolean;
 }
 
 const menuItemStyle = {
@@ -58,11 +59,16 @@ const dropDownStyle = {
   padding: '0px',
 };
 
-const Header = ({user, setUser}: HeaderProps) => {
-  const navItems = ["Home", "Employee Survey", "Workshop", "Dashboard"];
-  const linkItems = [
+const Header = ({user, setUser, isAdmin = false}: HeaderProps) => {
+  const navItems = isAdmin ? ["Home", "Employee Survey", "Workshop", "Dashboard"] : ["Home", "Workshop", "Dashboard"];
+  const linkItems = isAdmin ? [
     "/",
     "/employee_survey",
+    '/workshop',
+    "https://nautical-analytics.streamlit.app/",
+  ] : 
+  [
+    "/",
     '/workshop',
     "https://nautical-analytics.streamlit.app/",
   ];
@@ -122,15 +128,17 @@ const Header = ({user, setUser}: HeaderProps) => {
           >
             <MenuIcon />
           </IconButton >
-          <img src={naut_logo} alt="logo" height="40px" width="40px" style={{ marginRight: '5px' }}/>
+          
+          <a href="/"><img src={naut_logo} alt="logo" height="40px" width="40px" style={{ marginRight: '5px' }}/></a>
           <Typography
             variant="h6"
-            component="div"
-            sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-          >
-            
-            NAUTICAL
+            component="a"
+            sx={{ flexGrow: 1, display: { xs: "none", sm: "block", textDecoration: "none", color: "inherit" } }}
+            href="/"
+          >NAUTICAL
           </Typography>
+            
+            
  
           {user === undefined ? <></> : (
             <FormControl sx={{ padding: '0px' }}>

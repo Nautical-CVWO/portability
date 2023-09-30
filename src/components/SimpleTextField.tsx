@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { TextField } from '@mui/material';
-import { FieldProps, useFormikContext } from 'formik';
+import { FieldProps, FormikProps, useFormikContext } from 'formik';
 
 interface SimpleTextFieldProps {
     name: string;
@@ -15,7 +15,7 @@ interface SimpleTextFieldProps {
 
 const SimpleTextField = ({name, label, type="text", rows=1, multiline = false, disabled = false, ...props}: SimpleTextFieldProps) => {
 
-    const formik = useFormikContext();
+    const formik: FormikProps<any> = useFormikContext();
     return (
         <TextField 
             name={name}
@@ -28,6 +28,8 @@ const SimpleTextField = ({name, label, type="text", rows=1, multiline = false, d
             rows={rows}
             disabled={disabled}
             // placeholder={placeholder}
+            // sx={formik.dirty ? {} : { color: 'white' }}
+            InputProps={formik.values["email"] !== undefined ? {} : { style: { color: 'white' }}}
             {...props}       
         />
     );

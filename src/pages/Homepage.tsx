@@ -17,9 +17,15 @@ export interface User {
     points?: number;
     // Add other properties as needed
 }
+
+type HomeUser = User & {
+    isAdmin: boolean;
+}
+
 const Homepage: React.FC = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState<User | undefined>();
+    const [homeUser, setHomeUser] = useState<HomeUser | undefined>();
     const [skills, setSkills] = useState<Skill[]>([]);
     const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
 
@@ -37,7 +43,15 @@ const Homepage: React.FC = () => {
                         username: result.name,
                         // Add other properties as needed
                     };
+                    const homeUserr: HomeUser = {
+                        uid: res,
+                        points: result.points ? result.points : 0,
+                        username: result.name,
+                        // Add other properties as needed
+                        isAdmin: result.isAdmin,
+                    };
                     setUser(user);
+                    setHomeUser(homeUserr);
                     setIsLoggedIn(true)
                 }).catch((err) => {
                     throw new Error(err.message)
@@ -64,7 +78,7 @@ const Homepage: React.FC = () => {
 
     return (
         <Container disableGutters={true} maxWidth={false} sx={{ backgroundColor: '#161616', maxWith: '100%', width: "100%", height: 'min-content', padding: '0px', margin: '0px' }}>
-            <Header user={user} setUser={handleSetUser} />
+            <Header user={user} setUser={handleSetUser} isAdmin={homeUser?.isAdmin} />
             <Box sx={{ height: '350px', backgroundImage: `url(${bgm})`, backgroundSize: 'cover', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <Box sx={{ backgroundColor: 'white', height: ' 10%', flex: 3, alignItems: 'center' }}></Box>
                 <Typography variant="h1" sx={{ marginBottom: '15px', flex: 3, fontFamily: 'Montserrat', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white' }}>
@@ -92,7 +106,7 @@ const Homepage: React.FC = () => {
                         Employee Portal
                     </Typography>
                     <Typography variant="h6" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
-                        Do your survey now
+                        Do your skills survey / submit certificates now
                     </Typography>
                     <Box sx={{ height: '20px' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
@@ -106,10 +120,16 @@ const Homepage: React.FC = () => {
                         Employer Portal
                     </Typography>
                     <Typography variant="h6" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
-                        Do your survey now
+                        Assess your employees now
                     </Typography>
                     <Box sx={{ height: '20px' }} />
-                    <CustomButton label="Proceed" onClick={() => navigate('/employee_survey')} />
+                    
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }} >
+                        {homeUser?.isAdmin ? <CustomButton label="Proceed" onClick={() => navigate('/employee_survey')} /> 
+                                        : <CustomButton label="No Access" onClick={() => navigate('/')} /> }
+                        <Box mx={0.5}></Box>
+                        {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <></>}
+                    </Box>
                 </Box>
             </Box>
             <Box sx={{ margin: '10px', marginBottom: '60px', marginLeft: '40px', marginRight: '40px', backgroundColor: 'white', height: '2px' }}></Box>

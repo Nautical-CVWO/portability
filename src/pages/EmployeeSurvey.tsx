@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { EmployeeSurveyFormInitialValues } from "../types/EmployeeSurveyFormData";
 import {
@@ -54,13 +54,13 @@ const EmployeeSurvey: React.FC = () => {
   useEffect(() => {
       readUserData(currSelectedUserRef).then((result) => {
           const user: populateUser = {
-              
+              email: result.email,
               education: result.education,
-              username: result.name,
+              name: result.name,
               gender: result.gender,
               position:result.position,
-              id: result.id
-              
+              id: result.id,
+              isAdmin: result.isAdmin,
               // Add other properties as needed
           } as populateUser;
           setCurrPopulateUser(user);
@@ -91,16 +91,18 @@ const EmployeeSurvey: React.FC = () => {
   });
   
   type populateUser = User & {
+    email: string,
     education: string,
-    username: string,
+    name: string,
     gender: string,
     position: string,
     id: number,
+    isAdmin: boolean,
   }
   
   
   const initialValues = { ...EmployeeSurveyFormInitialValues, ...currPopulateUser };
-  
+
   return (
     <Formik
       initialValues={initialValues}
@@ -124,21 +126,25 @@ const EmployeeSurvey: React.FC = () => {
           values.teamwork,
           values.time_management,
           values.feedback,
-          false
+          false,
+          values.isAdmin,
         )
         setTimeout(() => {
           setIsSubmitting(false);
         }, 2000);
         navigate("/");
+        window.alert(`Survey for employee (${values.email}) is successful!`)
       }}
+      enableReinitialize
     >
-      {(formikProps: FormikProps<any>) => (
+      {(formikProps: FormikProps<any>) => {
+        return (
         <div style={{ backgroundImage: `url(${bgm})`, paddingTop: "3%", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", minHeight: '100vh', paddingBottom: "3%" }}>
           <Form >
             <Grid container>
               <Grid item xs={3}>
                 <Button variant="outlined" onClick={() => navigate('/')}
-                  sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '3px' }}>
+                  sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '10px' }}>
                   <KeyboardDoubleArrowLeft />Return to Homepage
                 </Button>
               </Grid>
@@ -202,6 +208,7 @@ const EmployeeSurvey: React.FC = () => {
                         onSelect={(event: any) => {
                           formikProps.setFieldValue("email", event.target.value)
                           setCurrSelectedUserRef(emailToRefMap[event.target.value])
+                          // formikProps.setFieldValue("education", currPopulateUser?.education)
                         }}  
                         renderInput={(params) => <SimpleTextField
                           name="email"
@@ -228,26 +235,21 @@ const EmployeeSurvey: React.FC = () => {
                 </Grid> */}
                 <Grid item xs={6} md={6}>
                   <Field
-                    render={() => (
-                      <SimpleTextField
-                        name="name"
-                        label="Employee Name"
-                        disabled={isSubmitting}
-                      />
-                    )}
+                    type="text"
+                    as={SimpleTextField}
+                    name="name"
+                    label="Employee Name"
+                    disabled={isSubmitting}
                   />
                 </Grid>
                 <Grid item xs={6} md={6}>
                   <Field
                     type="number"
-                    render={() => (
-                      <SimpleTextField
-                        name="id"
-                        label="Employee ID"
-                        type="number"
-                        disabled={isSubmitting}
-                      />
-                    )}
+                    as={SimpleTextField}
+                    name="id"
+                    label="Employee ID"
+                    disabled={isSubmitting}
+                  
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -264,7 +266,6 @@ const EmployeeSurvey: React.FC = () => {
                     <Field
                       name="gender"
                       as={Select}
-                      initialValue="other"
                       label={
                         <div style={{ display: "flex", textAlign: "left" }}>
                           <EmojiPeople
@@ -294,28 +295,24 @@ const EmployeeSurvey: React.FC = () => {
 
                 <Grid item xs={12} md={6}>
                   <Field
-                    render={() => (
-                      <SimpleTextField
-                        name="education"
-                        label={
-                          <div style={{ display: "flex", alignItems: "center" }}>
-                            <School
-                              fontSize="small"
-                              sx={{ marginRight: "5px" }}
-                            />{" "}
-                            Education
-                          </div>
-                        }
-                        disabled={isSubmitting}
-                      />
-                    )}
+                    as={SimpleTextField}
+                    name="education"
+                    label={
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <School
+                          fontSize="small"
+                          sx={{ marginRight: "5px" }}
+                        />{" "}
+                        Education
+                      </div>
+                    }
+                    disabled={isSubmitting}
                   />
                 </Grid>
                 <Grid item xs={6} md={6}>
                   <Field
-                    render={() => (
-                      <SimpleTextField
-                        name="position"
+                    as={SimpleTextField}
+                    name="position"
                         label={
                           <div style={{ display: "flex", alignItems: "center" }}>
                             <SupervisorAccount
@@ -325,9 +322,7 @@ const EmployeeSurvey: React.FC = () => {
                             Position
                           </div>
                         }
-                        disabled={isSubmitting}
-                      />
-                    )}
+                      disabled={isSubmitting}
                   />
                 </Grid>
                 {/* label={
@@ -525,28 +520,31 @@ const EmployeeSurvey: React.FC = () => {
                 <Grid item xs={12}>
                   <SimpleTextField
                     name="skillsReview"
-                    label="Skills Review (What skills do you wish to improve/learn the most?)"
+                    label="Skills Review (What skills do you think this employee needs to improve on the most?)"
                     rows={4}
                     disabled={isSubmitting}
                     multiline
                   />
                 </Grid>
+                <Grid item xs={12}>
+                  <Box mt={3}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </Grid>
               </Grid>
 
-              <Box mt={3}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                >
-                  Submit
-                </Button>
-              </Box>
+              
             </Card>
           </Form>
         </div>
-      )}
+      )}}
     </Formik>
   );
 };
