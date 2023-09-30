@@ -130,6 +130,30 @@ const EmployeeSurvey: React.FC = () => {
               </Typography>
 
               <Grid container spacing={2}>
+              <Grid item xs={6} md={6}>
+                  <Field
+                    render={() => (
+                      <SimpleTextField
+                        name="email"
+                        label="Employee Email"
+                        disabled={isSubmitting}
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid item xs={6} md={6}>
+                  <Field
+                    type="number"
+                    render={() => (
+                      <SimpleTextField
+                        name="password"
+                        label="Employee password"
+                        type="number"
+                        disabled={isSubmitting}
+                      />
+                    )}
+                  />
+                </Grid>
                 <Grid item xs={6} md={6}>
                   <Field
                     render={() => (
