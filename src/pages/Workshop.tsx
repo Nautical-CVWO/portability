@@ -70,7 +70,7 @@ const Workshop: React.FC = () => {
 
   return (
     <Container disableGutters={true} maxWidth={false} sx={{ backgroundColor: '#161616', maxWith: '100%', width: "100%", minHeight: '150vh', padding: '0px', margin: '0px' }}>
-      <Header user={user} setUser={handleSetUser} />
+      <Header user={user} setUser={handleSetUser} isAdmin={user?.isAdmin} />
       <Box sx={{ padding: '30px', paddingLeft: '60px', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         <Typography variant="h4" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', textAlign: 'left', color: 'white' }}>
           Workshop Lists

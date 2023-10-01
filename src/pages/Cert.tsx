@@ -10,6 +10,7 @@ import Inventory2RoundedIcon from '@mui/icons-material/Inventory2Rounded';
 import { ref, onValue } from "firebase/database";
 import { db } from '../backend/firebase';
 import CertificateCard from '../components/CertificateCard';
+import { KeyboardDoubleArrowLeft } from '@mui/icons-material';
 
 interface User {
     // Define the properties of your User interface here
@@ -71,12 +72,19 @@ const Cert: React.FC = () => {
             <Header user={user} setUser={handleSetUser} />
             <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <Box sx={{ padding: '30px', paddingLeft: '60px', height: '200px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start', backgroundColor: '#161616', }}>
-                    <Typography variant="h4" sx={{ marginBottom: '15px', textAlign: 'center', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
-                        Certificate Upload
-                    </Typography>
-                    <Typography variant="h6" sx={{ marginBottom: '15px', textAlign: 'center', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
-                        Upload Your Certificate to get additional 50 <Inventory2RoundedIcon sx={{ marginLeft: '5px' }} />
-                    </Typography>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                        <Button variant="outlined" onClick={() => navigate('/')}
+                            sx={{ marginTop: '30px', position: 'relative', bottom: '10px' }}>
+                            <KeyboardDoubleArrowLeft />Return to Homepage
+                        </Button>
+                        <Typography variant="h4" sx={{ marginBottom: '15px', textAlign: 'center', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
+                            Certificate Upload
+                        </Typography>
+                        <Typography variant="h6" sx={{ marginBottom: '15px', textAlign: 'center', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
+                            Upload Your Certificate to get additional 50 <Inventory2RoundedIcon sx={{ marginLeft: '5px' }} />
+                        </Typography>
+                    </div>
                 </Box>
                 <Box sx={{ alignItems: 'center', justifyContent: 'center', width: '70%', backgroundColor: 'white', borderRadius: '20px', padding: '30px', height: '200px', display: 'flex', flexDirection: 'column' }}>
                     <Formik
@@ -101,7 +109,6 @@ const Cert: React.FC = () => {
                                                 name="certUrl"
                                                 label="Certificate Url"
                                                 disabled={isSubmitting}
-
                                             />
                                         )} />
                                 </Grid>
@@ -147,7 +154,7 @@ const Cert: React.FC = () => {
 
             </Box>
 
-        </Container>
+        </Container >
     )
 }
 
