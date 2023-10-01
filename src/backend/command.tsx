@@ -82,7 +82,8 @@ const writeEmployeeData = async (
       }
 
       writeSkillsData(user, communication_score, creativity_score, problem_solving_score, teamwork_score, time_management_score);
-      writeFeedbackData(user, feedback);
+      // feedback not written by employer
+      // writeFeedbackData(user, feedback);
       return user; // Return user.uid on success
     }
   } catch (error) {
@@ -274,7 +275,7 @@ const writeSelfAssessmentData = (usr: SelfAssessmentUser): void => {
         console.log(currSkillsReview);
         const newSkillsReview = currSkillsReview + "\nThe employee will like to learn the following skills: " + usr.skillsReview;
         update(ref(db, `employees/${usr.uid}/`), { "skillsReview": newSkillsReview, "name": usr.name, "education": usr.education, "position": usr.position, "gender": usr.gender });
-
+        writeFeedbackData(usr.uid, usr.feedback);
       }
     })
 }

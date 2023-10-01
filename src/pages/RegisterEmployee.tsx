@@ -31,6 +31,8 @@ import naut_logo_gray from '../assets/naut-logo-gray.png'
 const RegisterEmployee: React.FC = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+
+  // const validation
   return (
     <Formik
       initialValues={EmployeeSurveyFormInitialValues}

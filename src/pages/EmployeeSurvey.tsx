@@ -213,6 +213,7 @@ const EmployeeSurvey: React.FC = () => {
                           renderInput={(params) => <SimpleTextField
                             name="email"
                             label="Employee Email"
+                            required={false}
                             {...params}
                           />
                           }
@@ -260,12 +261,13 @@ const EmployeeSurvey: React.FC = () => {
                             fontSize="small"
                             sx={{ marginRight: "5px" }}
                           />{" "}
-                          Gender
+                          Gender *
                         </div>
                       </InputLabel>
                       <Field
                         name="gender"
                         as={Select}
+                        required
                         label={
                           <div style={{ display: "flex", textAlign: "left" }}>
                             <EmojiPeople
@@ -298,11 +300,11 @@ const EmployeeSurvey: React.FC = () => {
                       as={SimpleTextField}
                       name="education"
                       label={
-                        <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ display: "flex", alignItems: "center", flexWrap: 'nowrap' }}>
                           <School
                             fontSize="small"
                             sx={{ marginRight: "5px" }}
-                          />{" "}
+                          />
                           Education
                         </div>
                       }
@@ -472,32 +474,6 @@ const EmployeeSurvey: React.FC = () => {
                           disabled={isSubmitting}
                         />
                       )}
-                    />
-                  </Grid>
-                </Grid>
-
-                {/* Feedback Section */}
-                <Typography
-                  variant="h6"
-                  sx={{
-                    marginTop: "20px",
-                    marginBottom: "20px",
-                    fontFamily: "Montserrat",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Chat fontSize="large" sx={{ marginRight: "10px" }} /> Feedback
-                </Typography>
-                <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <SimpleTextField
-                      name="feedback"
-                      label="Feedback"
-                      rows={4}
-                      disabled={isSubmitting}
-                      multiline
                     />
                   </Grid>
                 </Grid>

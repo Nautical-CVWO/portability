@@ -54,6 +54,7 @@ export type SelfAssessmentUser = Omit<User & {
     gender: string,
     position: string,
     id: number,
+    feedback: string,
     skillsReview: string,
 }, "username">
 
@@ -81,6 +82,7 @@ const EmployeeSelfAssessment: React.FC = () => {
                             gender: result.gender,
                             position: result.position,
                             id: result.id,
+                            feedback: result.feedback,
                             skillsReview: result.skillsReview,
                         };
                         setUser(user);
@@ -313,6 +315,32 @@ const EmployeeSelfAssessment: React.FC = () => {
                                                     </div>
                                                 }
                                                 disabled
+                                            />
+                                        </Grid>
+                                    </Grid>
+
+                                    {/* Feedback Section */}
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            marginTop: "20px",
+                                            marginBottom: "20px",
+                                            fontFamily: "Montserrat",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <Chat fontSize="large" sx={{ marginRight: "10px" }} /> Workplace Feedback
+                                    </Typography>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12}>
+                                            <SimpleTextField
+                                                name="feedback"
+                                                label="Feedback on the workplace environment etc."
+                                                rows={4}
+                                                disabled={isSubmitting}
+                                                multiline
                                             />
                                         </Grid>
                                     </Grid>

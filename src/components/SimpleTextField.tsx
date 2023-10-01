@@ -12,15 +12,30 @@ interface SimpleTextFieldProps {
     disabled?: boolean;
     // placeholder: any;
     isEmployeeSurvey?: boolean;
+    required?: boolean;
 }
 
-const SimpleTextField = ({ name, label, type = "text", rows = 1, multiline = false, disabled = false, isEmployeeSurvey = false, ...props }: SimpleTextFieldProps) => {
+const labelContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+};
+
+const SimpleTextField = ({ name, label, type = "text", rows = 1, multiline = false, disabled = false, isEmployeeSurvey = false, required = true, ...props }: SimpleTextFieldProps) => {
 
     const formik: FormikProps<any> = useFormikContext();
     return (
         <TextField
+            required
+            InputLabelProps={{ required: false }}
             name={name}
-            label={label}
+            label={required ? (
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                    {label}
+                    <span style={{ color: 'grey', marginLeft: '5px', lineHeight: 1 }}>
+                        *
+                    </span>
+                </div>) : <>{label}</>
+            }
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             fullWidth

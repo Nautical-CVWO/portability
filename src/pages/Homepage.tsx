@@ -109,11 +109,11 @@ const Homepage: React.FC = () => {
                         Employee Portal
                     </Typography>
                     <Typography variant="h6" sx={{ marginBottom: '15px', fontFamily: 'Montserrat', display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', color: 'white' }}>
-                        Do your skills survey / submit certificates now
+                        Do your workplace assessment / submit certificates
                     </Typography>
                     <Box sx={{ height: '20px' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
-                        {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <CustomButton label="Proceed to Survey" onClick={() => navigate('/employee_self_survey')} />}
+                        {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <CustomButton label="Self-Assessment" onClick={() => navigate('/employee_self_survey')} />}
                         <Box mx={0.5}></Box>
                         {user === undefined ? <CustomButton label="Register" onClick={() => navigate('/register')} /> : <CustomButton label="View/Submit Certificates" onClick={() => navigate('/cert')} />}
                     </Box>
@@ -128,7 +128,7 @@ const Homepage: React.FC = () => {
                     <Box sx={{ height: '20px' }} />
 
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
-                        {homeUser?.isAdmin ? <CustomButton label="Proceed to Survey" onClick={() => navigate('/employee_survey')} />
+                        {homeUser?.isAdmin ? <CustomButton label="Assess Employees" onClick={() => navigate('/employee_survey')} />
                             : <CustomButton label="No Access" onClick={() => navigate('/')} />}
                         <Box mx={0.5}></Box>
                         {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <></>}
