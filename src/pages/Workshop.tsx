@@ -147,7 +147,7 @@ const Workshop: React.FC = () => {
         </div>
       </Box>) : <>
       </>}
-      <Box sx={{ padding: '30px', padding: '60px', width:'100%', height: 'min-content', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+      <Box sx={{ padding: '60px', width: '100%', height: 'min-content', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         {workshopList.length > 0 ? (
           workshopList.map((item: { workshopName: string, workshopDate: string, workshopPoint: number }, index) => {
             const isParticipating = user && user.uid ? checkUserIsParticipating(user.uid, item.workshopName) : Promise.resolve(false);
@@ -166,7 +166,7 @@ const Workshop: React.FC = () => {
           })
         ) : <></>}
       </Box>
-      
+
 
     </Container>
   )

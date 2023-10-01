@@ -36,7 +36,7 @@ const Homepage: React.FC = () => {
     useEffect(() => {
         readCurrentUserData()
             .then((res) => {
-                if(res != undefined) {
+                if (res != undefined) {
                     readUserData(res).then((result) => {
                         console.log(result)
                         const user: User = {
@@ -115,7 +115,7 @@ const Homepage: React.FC = () => {
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
                         {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <CustomButton label="Proceed" onClick={() => navigate('/login')} />}
                         <Box mx={0.5}></Box>
-                        {user === undefined ? <CustomButton label="Register" onClick={() => navigate('/register')} />: <CustomButton label="Submit Certificate" onClick={() => navigate('/cert')} />}
+                        {user === undefined ? <CustomButton label="Register" onClick={() => navigate('/register')} /> : <CustomButton label="Submit Certificate" onClick={() => navigate('/cert')} />}
                     </Box>
                 </Box>
                 <Box sx={{ flex: 1, padding: '30px', paddingLeft: '60px', height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -126,10 +126,10 @@ const Homepage: React.FC = () => {
                         Assess your employees now
                     </Typography>
                     <Box sx={{ height: '20px' }} />
-                    
+
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
-                        {homeUser?.isAdmin ? <CustomButton label="Proceed" onClick={() => navigate('/employee_survey')} /> 
-                                        : <CustomButton label="No Access" onClick={() => navigate('/')} /> }
+                        {homeUser?.isAdmin ? <CustomButton label="Proceed" onClick={() => navigate('/employee_survey')} />
+                            : <CustomButton label="No Access" onClick={() => navigate('/')} />}
                         <Box mx={0.5}></Box>
                         {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <></>}
                     </Box>
