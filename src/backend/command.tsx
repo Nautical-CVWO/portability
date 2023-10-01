@@ -80,28 +80,30 @@ const writeEmployeeData = async (
 const writeLoginData = (email: string, password: string): Promise<any> => {
   return new Promise((resolve, reject) => {
     const dataLocation = "employees";
-  // const reference = ref(db, `${dataLocation}/${id}/`);
-  const auth = getAuth();
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed in
-      const user = userCredential.user;
-      const reference = ref(db, `${dataLocation}/${user.uid}/`);
-      get(reference)
-        .then((snapshot) => {
-          if (snapshot.exists()) {
-            alert("Successfully signed in");
-            resolve("Successfully signed in")
-          }
-        })
-        .catch((error) => {
-          reject("Failed to fetch data:" + error.message);
-        });
+    // const reference = ref(db, `${dataLocation}/${id}/`);
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        const reference = ref(db, `${dataLocation}/${user.uid}/`);
+        get(reference)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              alert("Successfully signed in");
+              resolve("Successfully signed in")
+            }
+          })
+          .catch((error) => {
+            reject("Failed to fetch data:" + error.message);
+          });
+      })
+    .then((res) => {
+      resolve("Successfully signed in")
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      reject("moo");
+      console.log(error.message)
+      reject(error.message);
     });
 });
   
@@ -152,19 +154,23 @@ const readSkillMeanData = async (): Promise<any> => {
 };
 
 const readUserData = async (uid: string): Promise<any> => {
-    const dataLocation = "employees";
+      return new Promise(async (resolve, reject) => {
+        const dataLocation = "employees";
     const reference = ref(db, `${dataLocation}/${uid}`);
-    const data = await get(reference)
+    await get(reference)
       .then((snapshot) => {
         if (snapshot.exists()) {
-          return snapshot.val();
+          console.log(snapshot.val())
+          resolve( snapshot.val());
         }
       })
       .catch((error) => {
-        console.log("Failed to fetch data:", error.message);
+        reject("Failed to fetch data:");
       });
-    return data;
-  };
+      
+    
+  })
+}
 
 
 const readUserEmails = async (): Promise<any> => {

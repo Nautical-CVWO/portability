@@ -36,26 +36,29 @@ const Homepage: React.FC = () => {
     useEffect(() => {
         readCurrentUserData()
             .then((res) => {
-                readUserData(res).then((result) => {
-                    const user: User = {
-                        uid: res,
-                        points: result.points ? result.points : 0,
-                        username: result.name,
-                        // Add other properties as needed
-                    };
-                    const homeUserr: HomeUser = {
-                        uid: res,
-                        points: result.points ? result.points : 0,
-                        username: result.name,
-                        // Add other properties as needed
-                        isAdmin: result.isAdmin,
-                    };
-                    setUser(user);
-                    setHomeUser(homeUserr);
-                    setIsLoggedIn(true)
-                }).catch((err) => {
-                    throw new Error(err.message)
-                })
+                if(res != undefined) {
+                    readUserData(res).then((result) => {
+                        console.log(result)
+                        const user: User = {
+                            uid: res,
+                            points: result.points ? result.points : 0,
+                            username: result.name,
+                            // Add other properties as needed
+                        };
+                        const homeUserr: HomeUser = {
+                            uid: res,
+                            points: result.points ? result.points : 0,
+                            username: result.name,
+                            // Add other properties as needed
+                            isAdmin: result.isAdmin,
+                        };
+                        setUser(user);
+                        setHomeUser(homeUserr);
+                        setIsLoggedIn(true)
+                    }).catch((err) => {
+                        throw new Error(err.message)
+                    })
+                }
 
             }).catch((err) => {
                 throw new Error(err.message)

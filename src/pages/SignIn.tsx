@@ -38,6 +38,7 @@ const SignIn: React.FC = () => {
                     // Handle form submission here
                     setIsSubmitting(true);
                     writeLoginData(values.email, values.password).then((res) => {
+                        console.log(res)
                         setIsSubmitting(false); 
                         navigate('/');
                     }).catch((err) => {

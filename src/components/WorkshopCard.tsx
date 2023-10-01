@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Card, CardContent, Button, IconButton, Grid, Paper } from '@mui/material';
 import { Event, Star, Delete } from "@mui/icons-material";
 import { participateWorkshop, cancelParticipation, deleteWorkshop } from "../backend/command";
+import { Box } from '@mui/system';
 
 interface WorkshopCardProps {
   uid: string;
@@ -15,6 +16,7 @@ interface WorkshopCardProps {
 const cardStyle = {
   margin: '16px',
   borderRadius: '8px',
+  width: '100%'
 };
 
 const contentStyle = {
@@ -58,7 +60,7 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({
     participateWorkshop(uid, workshopName, workshopPoint);
   };
 
-  
+
   const handleCancelClick = () => {
     setIsParticipating(false);
     cancelParticipation(uid, workshopName, workshopPoint);
@@ -67,7 +69,7 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({
   const handleDeleteClick = () => {
     const isConfirmed = window.confirm("Are you sure you want to delete workshop?");
     if (isConfirmed) {
-        deleteWorkshop(workshopName, workshopPoint);
+      deleteWorkshop(workshopName, workshopPoint);
     }
   };
 
@@ -75,39 +77,60 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({
     <Card elevation={3} style={cardStyle}>
       <Paper style={contentStyle}>
         <Grid container justifyContent="space-between" alignItems="center">
-          <Grid item xs={8}>
-            <Typography variant="h6" style={{ fontFamily: 'Montserrat',fontWeight: 'bold', marginBottom: '8px' }}>
-              {workshopName}
-            </Typography>
-            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-              <Event style={iconStyle} />
-              <Typography style={{ fontFamily: 'Montserrat',fontSize: '0.9rem', color: 'lightgray' }}>
-                Date: {workshopDate}
-              </Typography>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <Star style={{ ...iconStyle, color: 'yellow' }} />
-              <Typography style={{ fontFamily: 'Montserrat',fontWeight: 'bold', color: 'yellow' }}>
-                Points: {workshopPoint}
-              </Typography>
-            </div>
-            {isParticipating ? 
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography style={{ fontFamily: 'Montserrat',fontWeight: 'bold', color: 'green' }}>
-              Participating
-            </Typography>
-          </div>
-          :
-          <></>}
-            
+          <Grid item xs={10} justifyContent="space-between" alignItems="center">
+            <Grid container sx={{ display: 'flex', flexDirection: 'row', alignItems: ' flex-start', justifyContent:'flex-start' }}>
+              <Grid item xs={3} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: '8px' }}>
+                <Typography variant="h6" style={{ fontFamily: 'Montserrat', fontWeight: 'bold', marginBottom: '8px' }}>
+                  {workshopName}
+                </Typography>
+                <Box style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '8px' }}>
+                  <Event style={iconStyle} />
+                  <Typography variant='h6' style={{ fontFamily: 'Montserrat', fontSize: '0.9rem', color: 'lightgray' }}>
+                    Date: {workshopDate}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Box mx={3}/>
+              <Grid item xs={3} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <Star style={{ ...iconStyle, color: 'white' }} />
+                  <Typography variant='h6' style={{ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'white' }}>
+                    Points: {workshopPoint}
+                  </Typography>
+                </div>
+                
+              </Grid>
+              <Box mx={3}/>
+              <Grid item xs={3} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: '8px' }}>
+              {isParticipating ?
+                  <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    <Typography variant='h6' style={{ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'white' }}>
+                      Status : Participating
+                    </Typography>
+                  </div>
+                  :
+                  <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+                    <Typography variant='h6' style={{ fontFamily: 'Montserrat', fontWeight: 'bold', color: 'white' }}>
+                      Status : Not Participating
+                    </Typography>
+                  </div>}
+                
+              </Grid>
+              
+            </Grid>
+
+
+
+
+
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={2} >
             {/* Delete icon */}
             {isAdmin === null ? (
               <Typography>Loading...</Typography>
             ) : isAdmin ? (
               <>
-                <IconButton sx={{ fontSize: '20px', cursor: 'pointer', color: 'red' }} onClick={() => {handleDeleteClick()}}>
+                <IconButton sx={{ fontSize: '20px', cursor: 'pointer', color: 'red' }} onClick={() => { handleDeleteClick() }}>
                   <Delete />
                 </IconButton>
               </>
@@ -122,7 +145,8 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({
                 variant="contained"
                 color="primary"
                 sx={{
-                  ...buttonStyle,fontFamily: 'Montserrat',
+                  ...buttonStyle, 
+                  width:'60%',
                   backgroundColor: '#4CAF50',
                   '&:hover': { backgroundColor: '#45A049' },
                 }}
@@ -136,7 +160,7 @@ const WorkshopCard: React.FC<WorkshopCardProps> = ({
                 color="primary"
                 sx={{
                   ...buttonStyle,
-                  fontFamily: 'Montserrat',
+                  width:'60%',
                   backgroundColor: '#f44336',
                   '&:hover': { backgroundColor: '#d32f2f' },
                 }}
