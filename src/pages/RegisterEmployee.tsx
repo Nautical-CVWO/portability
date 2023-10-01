@@ -55,7 +55,7 @@ const RegisterEmployee: React.FC = () => {
           values.feedback,
           true,
           values.isAdmin
-        ) 
+        )
         setTimeout(() => {
           setIsSubmitting(false);
         }, 2000);
@@ -63,7 +63,7 @@ const RegisterEmployee: React.FC = () => {
       }}
     >
       {(formikProps: FormikProps<any>) => (
-        <div style={{ backgroundImage: `url(${bgm})`, paddingTop: "3%", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", minHeight: '100vh', paddingBottom: "3%"}}>
+        <div style={{ backgroundImage: `url(${bgm})`, paddingTop: "3%", backgroundSize: "cover", backgroundRepeat: "no-repeat", backgroundAttachment: "fixed", minHeight: '100vh', paddingBottom: "3%" }}>
           <Form >
             <Grid container>
               <Grid item xs={3} sx={{
@@ -71,24 +71,24 @@ const RegisterEmployee: React.FC = () => {
                 alignItems: "center"
               }}>
                 <Button variant="outlined" onClick={() => navigate('/')}
-                        sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '10px'}}>
+                  sx={{ marginLeft: "60px", marginTop: '30px', position: 'relative', bottom: '10px' }}>
                   <KeyboardDoubleArrowLeft />Return to Homepage
                 </Button>
-              </Grid>  
+              </Grid>
               <Grid item xs={6}>
                 <Typography
-                    variant="h4"
-                    sx={{
-                      fontFamily: "Montserrat",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "white",
-                      paddingRight: '23px',
-                      marginBottom: '30px'
-                    }}
+                  variant="h4"
+                  sx={{
+                    fontFamily: "Montserrat",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "white",
+                    paddingRight: '23px',
+                    marginBottom: '30px'
+                  }}
                 >
-                  <img src={naut_logo_gray} alt="logo" height="60px" width="60px" style={{ marginRight: '5px' }}/>
+                  <img src={naut_logo_gray} alt="logo" height="60px" width="60px" style={{ marginRight: '5px' }} />
                   Register as New Employee
                 </Typography>
               </Grid>
@@ -102,7 +102,7 @@ const RegisterEmployee: React.FC = () => {
                 boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
                 opacity: '90%'
               }}
-            >      
+            >
 
               {/* Employee Information Section */}
               <Typography
@@ -120,7 +120,7 @@ const RegisterEmployee: React.FC = () => {
               </Typography>
 
               <Grid container spacing={2}>
-              <Grid item xs={6} md={6}>
+                <Grid item xs={6} md={6}>
                   <Field
                     render={() => (
                       <SimpleTextField
@@ -248,20 +248,20 @@ const RegisterEmployee: React.FC = () => {
                   />
                 </Grid>
                 <Grid item xs={6} md={6}>
-                  <div style={{ 
+                  <div style={{
                     display: "flex",
                     alignItems: "center",
                     paddingTop: '5px'
                   }}>
-                  <Field
-                    as={Checkbox}
-                    name="isAdmin"
-                    label="Employer/Admin"
-                  />
+                    <Field
+                      as={Checkbox}
+                      name="isAdmin"
+                      label="Employer/Admin"
+                    />
                     <span>Employer/Admin </span>
                   </div>
                 </Grid>
-                
+
               </Grid>
 
               <Box mt={3}>
