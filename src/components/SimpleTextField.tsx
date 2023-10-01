@@ -11,9 +11,10 @@ interface SimpleTextFieldProps {
     multiline?: boolean;
     disabled?: boolean;
     // placeholder: any;
+    isEmployeeSurvey?: boolean;
 }
 
-const SimpleTextField = ({ name, label, type = "text", rows = 1, multiline = false, disabled = false, ...props }: SimpleTextFieldProps) => {
+const SimpleTextField = ({ name, label, type = "text", rows = 1, multiline = false, disabled = false, isEmployeeSurvey = false, ...props }: SimpleTextFieldProps) => {
 
     const formik: FormikProps<any> = useFormikContext();
     return (
@@ -29,7 +30,7 @@ const SimpleTextField = ({ name, label, type = "text", rows = 1, multiline = fal
             disabled={disabled}
             // placeholder={placeholder}
             // sx={formik.dirty ? {} : { color: 'white' }}
-            InputProps={formik.values["email"] !== undefined ? {} : { style: { color: 'white' } }}
+            InputProps={isEmployeeSurvey ? formik.values["email"] !== undefined ? {} : { style: { color: 'white' } } : {}}
             {...props}
         />
     );
