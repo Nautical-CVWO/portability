@@ -28,6 +28,7 @@ const SimpleTextField = ({ name, label, type = "text", rows = 1, multiline = fal
             type={type}
             rows={rows}
             disabled={disabled}
+            value={formik.values[name]}
             // placeholder={placeholder}
             // sx={formik.dirty ? {} : { color: 'white' }}
             InputProps={isEmployeeSurvey ? formik.values["email"] !== undefined ? {} : { style: { color: 'white' } } : {}}
