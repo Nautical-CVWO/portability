@@ -8,6 +8,7 @@ import {
   signOut,
 } from "firebase/auth";
 import { User } from "../pages/Homepage";
+import { SelfAssessmentUser } from "../pages/EmployeeSelfAssessment";
 
 const writeEmployeeData = async (
   email: string,
@@ -38,9 +39,9 @@ const writeEmployeeData = async (
         password
       );
     }
-    
+
     const user = await readCurrentUserData();
-    console.log("USER IS ", user);
+
     const dataLocation = "employees";
     const reference = ref(db, `${dataLocation}/${user}/`);
 
@@ -51,19 +52,35 @@ const writeEmployeeData = async (
       // You can handle this case as needed, e.g., throw an error
       throw new Error("Invalid id: id already exists in Employee Data");
     } else {
-      await set(ref(db, `${dataLocation}/${user}/`), {
-        name,
-        email,
-        gender,
-        education,
-        position,
-        performance,
-        skillsReview,
-        id,
-        // Set a default value of 0 for a property (e.g., points)
-        points: 0,
-        isAdmin: isAdmin
-      });
+      if (isNew) {
+        await set(ref(db, `${dataLocation}/${user}/`), {
+          name,
+          email,
+          gender,
+          education,
+          position,
+          performance,
+          skillsReview,
+          id,
+          // Set a default value of 0 for a property (e.g., points)
+          points: 0,
+          isAdmin: isAdmin
+        });
+      } else {
+        // We update instead
+        update(ref(db, `employees/${user}/`), {
+          name,
+          email,
+          gender,
+          education,
+          position,
+          performance,
+          skillsReview,
+          id,
+          isAdmin
+        });
+      }
+
       writeSkillsData(user, communication_score, creativity_score, problem_solving_score, teamwork_score, time_management_score);
       writeFeedbackData(user, feedback);
       return user; // Return user.uid on success
@@ -98,15 +115,15 @@ const writeLoginData = (email: string, password: string): Promise<any> => {
             reject("Failed to fetch data:" + error.message);
           });
       })
-    .then((res: any) => {
-      resolve("Successfully signed in")
-    })
-    .catch((error: any) => {
-      console.log(error.message)
-      reject(error.message);
-    });
-});
-  
+      .then((res: any) => {
+        resolve("Successfully signed in")
+      })
+      .catch((error: any) => {
+        console.log(error.message)
+        reject(error.message);
+      });
+  });
+
 };
 
 const writeSkillsData = (
@@ -154,55 +171,55 @@ const readSkillMeanData = async (): Promise<any> => {
 };
 
 const readUserData = async (uid: string): Promise<any> => {
-      return new Promise(async (resolve, reject) => {
-        const dataLocation = "employees";
+  return new Promise(async (resolve, reject) => {
+    const dataLocation = "employees";
     const reference = ref(db, `${dataLocation}/${uid}`);
     await get(reference)
       .then((snapshot) => {
         if (snapshot.exists()) {
           console.log(snapshot.val())
-          resolve( snapshot.val());
+          resolve(snapshot.val());
         }
       })
       .catch((error) => {
         reject("Failed to fetch data:");
       });
-      
-    
+
+
   })
 }
 
 
 const readUserEmails = async (): Promise<any> => {
-    const dataLocation = "employees";
-    const reference = ref(db, `${dataLocation}/`);
-    const data = await get(reference)
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          return snapshot.val();
-        }
-      })
-      .catch((error) => {
-        console.log("Failed to fetch data:", error.message);
-      });
-    return data;
+  const dataLocation = "employees";
+  const reference = ref(db, `${dataLocation}/`);
+  const data = await get(reference)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return snapshot.val();
+      }
+    })
+    .catch((error) => {
+      console.log("Failed to fetch data:", error.message);
+    });
+  return data;
 }
 
 
 const readCurrentUserData = async (): Promise<any> => {
-    return new Promise((resolve, reject) => {
-        const auth = getAuth();
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
-                resolve(user.uid);
-            } 
-            // else {
-            //     reject(new Error("Something wrong"));
-            // }
-            // Don't forget to unsubscribe when done.
-            unsubscribe();
-        });
+  return new Promise((resolve, reject) => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        resolve(user.uid);
+      }
+      // else {
+      //     reject(new Error("Something wrong"));
+      // }
+      // Don't forget to unsubscribe when done.
+      unsubscribe();
     });
+  });
 };
 
 
@@ -248,43 +265,57 @@ const writeFeedbackData = (uid: string, feedback: string): void => {
   update(ref(db, `${dataLocation}/`), feedbackData);
 };
 
+const writeSelfAssessmentData = (usr: SelfAssessmentUser): void => {
+  const referencePoint = ref(db, `employees/${usr.uid}`);
+  get(referencePoint)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        let currSkillsReview = snapshot.val().skillsReview;
+        console.log(currSkillsReview);
+        const newSkillsReview = currSkillsReview + "\nThe employee will like to learn the following skills: " + usr.skillsReview;
+        update(ref(db, `employees/${usr.uid}/`), { "skillsReview": newSkillsReview, "name": usr.name, "education": usr.education, "position": usr.position, "gender": usr.gender });
+
+      }
+    })
+}
+
 const writeCertData = (uid: string, url: string): void => {
   const dataLocation = "certificate";
   const certUrl = {
-    url : url
+    url: url
   }
   push(ref(db, `${dataLocation}/${uid}`), certUrl);
   const participantsData: { [key: string]: string } = {};
   participantsData[uid] = uid;
   const referencePoint = ref(db, `employees/${uid}`);
-    get(referencePoint)
-     .then((snapshot) => {
+  get(referencePoint)
+    .then((snapshot) => {
       if (snapshot.exists()) {
         let currPoints = Number(snapshot.val().points);
         currPoints = Number(currPoints) + Number(50);
-        update(ref(db, `employees/${uid}/`), {"points": currPoints});
+        update(ref(db, `employees/${uid}/`), { "points": currPoints });
 
       }
-     })
+    })
 };
 
 const logoutData = (): Promise<any> => {
   return new Promise((resolve, reject) => {
     const auth = getAuth();
     signOut(auth).then(() => {
-       resolve("Successfully logged out")
+      resolve("Successfully logged out")
     }).catch((error) => {
-        reject(error.message)
+      reject(error.message)
     });
-});
+  });
 };
 
 const writeWorkshopData = (
-    workshopName: string,
-    workshopPoint: number,
-    workshopDate: string,
-    uid: string
-  ): void => {
+  workshopName: string,
+  workshopPoint: number,
+  workshopDate: string,
+  uid: string
+): void => {
   const dataLocation = "workshops";
   const reference = ref(db, `${dataLocation}/${workshopName}`);
   get(reference)
@@ -298,17 +329,17 @@ const writeWorkshopData = (
       console.log("Failed to fetch data:", error.message);
       return;
     });
-    set(reference, {
-      workshopName: workshopName,
-      workshopPoint: workshopPoint,
-      workshopDate: workshopDate,
-      addedBy: uid
-    });
+  set(reference, {
+    workshopName: workshopName,
+    workshopPoint: workshopPoint,
+    workshopDate: workshopDate,
+    addedBy: uid
+  });
 };
 
 const checkUserIsParticipating = async (uid: string, workshopName: string): Promise<boolean> => {
   const reference = ref(db, `workshops/${workshopName}/participants/${uid}`);
-  
+
   try {
     const snapshot = await get(reference);
     return snapshot.exists();
@@ -326,29 +357,29 @@ const participateWorkshop = (
   const reference = ref(db, `workshops/${workshopName}/participants/${uid}`);
   console.log(uid);
   get(reference)
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-      console.log("Invalid: id already participating in " + {workshopName});
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("Invalid: id already participating in " + { workshopName });
+        return;
+      }
+    })
+    .catch((error) => {
+      console.log("Failed to fetch data:", error.message);
       return;
-    }
-  })
-  .catch((error) => {
-    console.log("Failed to fetch data:", error.message);
-    return;
-  });
+    });
   const participantsData: { [key: string]: string } = {};
   participantsData[uid] = uid;
   update(ref(db, `workshops/${workshopName}/participants/`), participantsData);
   const referencePoint = ref(db, `employees/${uid}`);
-    get(referencePoint)
-     .then((snapshot) => {
+  get(referencePoint)
+    .then((snapshot) => {
       if (snapshot.exists()) {
         let currPoints = Number(snapshot.val().points);
         currPoints = Number(currPoints) + Number(workshopPoint);
-        update(ref(db, `employees/${uid}/`), {"points": currPoints});
+        update(ref(db, `employees/${uid}/`), { "points": currPoints });
 
       }
-     })
+    })
 }
 
 const cancelParticipation = (
@@ -358,31 +389,31 @@ const cancelParticipation = (
 ): void => {
   const reference = ref(db, `workshops/${workshopName}/participants/${uid}`);
   get(reference)
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-      console.log("Invalid: id is already not participating in " + {workshopName});
-      remove(reference);
-
-    const referencePoint = ref(db, `employees/${uid}`);
-    get(referencePoint)
-     .then((snapshot) => {
+    .then((snapshot) => {
       if (snapshot.exists()) {
-        let currPoints = Number(snapshot.val().points);
-        currPoints -= workshopPoint;
-        update(ref(db, `employees/${uid}/`), {"points": currPoints});
+        console.log("Invalid: id is already not participating in " + { workshopName });
+        remove(reference);
 
+        const referencePoint = ref(db, `employees/${uid}`);
+        get(referencePoint)
+          .then((snapshot) => {
+            if (snapshot.exists()) {
+              let currPoints = Number(snapshot.val().points);
+              currPoints -= workshopPoint;
+              update(ref(db, `employees/${uid}/`), { "points": currPoints });
+
+            }
+          })
+          .catch((error) => {
+            console.log("Failed to fetch data:", error.message);
+            return;
+          });
       }
-     })
-     .catch((error) => {
+    })
+    .catch((error) => {
       console.log("Failed to fetch data:", error.message);
       return;
     });
-    }
-  })
-  .catch((error) => {
-    console.log("Failed to fetch data:", error.message);
-    return;
-  });
 }
 
 const deleteWorkshop = (
@@ -391,31 +422,31 @@ const deleteWorkshop = (
 ): void => {
   const reference = ref(db, `workshops/${workshopName}/participants`);
   get(reference)
-  .then((snapshot) => {
-    if (snapshot.exists()) {
-      const participants = Object.values(snapshot.val());
-      for (let i = 0; i < participants.length; i++) {
-        let uid = participants[i];
-        const referencePoint = ref(db, `employees/${uid}`);
-        get(referencePoint)
-         .then((snapshot) => {
-          if (snapshot.exists()) {
-            let currPoints = Number(snapshot.val().points);
-            currPoints -= workshopPoint;
-            update(ref(db, `employees/${uid}/`), {"points": currPoints});
-          }
-         })
-         .catch((error) => {
-          console.log("Failed to fetch data:", error.message);
-          return;
-        });
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const participants = Object.values(snapshot.val());
+        for (let i = 0; i < participants.length; i++) {
+          let uid = participants[i];
+          const referencePoint = ref(db, `employees/${uid}`);
+          get(referencePoint)
+            .then((snapshot) => {
+              if (snapshot.exists()) {
+                let currPoints = Number(snapshot.val().points);
+                currPoints -= workshopPoint;
+                update(ref(db, `employees/${uid}/`), { "points": currPoints });
+              }
+            })
+            .catch((error) => {
+              console.log("Failed to fetch data:", error.message);
+              return;
+            });
+        }
       }
-    }
-  })
-  .catch((error) => {
-    console.log("Failed to fetch data:", error.message);
-    return;
-  });
+    })
+    .catch((error) => {
+      console.log("Failed to fetch data:", error.message);
+      return;
+    });
   remove(ref(db, `workshops/${workshopName}`));
 }
 
@@ -483,5 +514,6 @@ export {
   participateWorkshop,
   cancelParticipation,
   deleteWorkshop,
-  handleDeleteCertificate
+  handleDeleteCertificate,
+  writeSelfAssessmentData
 };

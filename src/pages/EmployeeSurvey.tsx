@@ -161,8 +161,8 @@ const EmployeeSurvey: React.FC = () => {
                       marginBottom: '30px'
                     }}
                   >
-                    <img src={naut_logo_gray} alt="logo" height="60px" width="60px" style={{ marginRight: '5px' }} />
-                    Employee Survey
+                    <img src={naut_logo_gray} alt="logo" height="60px" width="60px" style={{ marginRight: '5px', marginLeft: '5px' }} />
+                    Employee Assessment Survey
                   </Typography>
                 </Grid>
                 <Grid item xs={3} />

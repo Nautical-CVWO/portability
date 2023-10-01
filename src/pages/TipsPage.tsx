@@ -3,7 +3,7 @@ import Tips from './Tips';
 
 
 const TipsPage: React.FC = () => {
-    const clientId = 'lMJ7wdS2looOAxZ4aoirfTVnIYWJFgttkYMznkzU';
+  const clientId = 'lMJ7wdS2looOAxZ4aoirfTVnIYWJFgttkYMznkzU';
   const clientSecret = 'DxuFUhcXHOGp5C5xoEb93LTiXiRETFtQ7aCxNq62wFCLP8aEjpwIYiueVhGgxSRJFfm9kXD1PasDbeSTz5pddSLWD4r3oKJGDc6eSrfCQgHG9S9m7SQny3XtTxpHgM6K';
   const searchQuery = 'java';
 
@@ -19,12 +19,12 @@ const TipsPage: React.FC = () => {
   });
 
   useEffect(() => {
-   
+
   }, [])
 
   return (
     <>
-        <Tips uid={''} cards={[]} />
+      <Tips uid={''} cards={[]} />
     </>
   )
 

@@ -113,9 +113,9 @@ const Homepage: React.FC = () => {
                     </Typography>
                     <Box sx={{ height: '20px' }} />
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
-                        {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <CustomButton label="Proceed" onClick={() => navigate('/login')} />}
+                        {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <CustomButton label="Proceed to Survey" onClick={() => navigate('/employee_self_survey')} />}
                         <Box mx={0.5}></Box>
-                        {user === undefined ? <CustomButton label="Register" onClick={() => navigate('/register')} /> : <CustomButton label="Submit Certificate" onClick={() => navigate('/cert')} />}
+                        {user === undefined ? <CustomButton label="Register" onClick={() => navigate('/register')} /> : <CustomButton label="View/Submit Certificates" onClick={() => navigate('/cert')} />}
                     </Box>
                 </Box>
                 <Box sx={{ flex: 1, padding: '30px', paddingLeft: '60px', height: '300px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -128,7 +128,7 @@ const Homepage: React.FC = () => {
                     <Box sx={{ height: '20px' }} />
 
                     <Box sx={{ display: 'flex', flexDirection: 'row' }} >
-                        {homeUser?.isAdmin ? <CustomButton label="Proceed" onClick={() => navigate('/employee_survey')} />
+                        {homeUser?.isAdmin ? <CustomButton label="Proceed to Survey" onClick={() => navigate('/employee_survey')} />
                             : <CustomButton label="No Access" onClick={() => navigate('/')} />}
                         <Box mx={0.5}></Box>
                         {user === undefined ? <CustomButton label="Login" onClick={() => navigate('/login')} /> : <></>}
