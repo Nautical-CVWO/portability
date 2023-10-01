@@ -83,7 +83,7 @@ const writeLoginData = (email: string, password: string): Promise<any> => {
     // const reference = ref(db, `${dataLocation}/${id}/`);
     const auth = getAuth();
     signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then((userCredential: any) => {
         // Signed in
         const user = userCredential.user;
         const reference = ref(db, `${dataLocation}/${user.uid}/`);
@@ -98,10 +98,10 @@ const writeLoginData = (email: string, password: string): Promise<any> => {
             reject("Failed to fetch data:" + error.message);
           });
       })
-    .then((res) => {
+    .then((res: any) => {
       resolve("Successfully signed in")
     })
-    .catch((error) => {
+    .catch((error: any) => {
       console.log(error.message)
       reject(error.message);
     });
